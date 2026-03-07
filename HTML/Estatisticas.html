@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camelearn - Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="../CSS/Estatisticas.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">Camelearn</div>
+
+        <div class="menu">
+            <a href="../index.html">Início</a>
+            <a href="./Cronograma.html">Criar cronograma</a>
+            <a href="#">Estatísticas</a>
+        </div>
+    </header>
+
+    <div class="main">
+
+        <div class="top">
+            <h1>Desempenho do Aluno</h1>
+            <p>Aluno: Luiz</p>
+        </div>
+
+        <div class="cards">
+
+            <div class="card">
+                <h3>Média Geral</h3>
+                <p>8.4</p>
+            </div>
+
+            <div class="card">
+                <h3>Exercícios feitos</h3>
+                <p>42</p>
+            </div>
+
+            <div class="card">
+                <h3>Matérias</h3>
+                <p>6</p>
+            </div>
+
+            <div class="card">
+                <h3>Progresso</h3>
+                <p>78%</p>
+            </div>
+
+        </div>
+
+        <div class="grafico">
+
+            <h2>Evolução das notas</h2>
+
+            <canvas id="graficoNotas"></canvas>
+
+        </div>
+
+    </div>
+
+    <footer>
+        <p>© 2026 Camelearn - Plataforma de estudo personalizado.</p>
+    </footer>
+
+    <script src="../JAVASCRIPT/Estatisticas.js"></script>
+
+</body>
+
+</html>

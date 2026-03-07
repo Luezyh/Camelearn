@@ -2,7 +2,7 @@
     --verde1: #1b5e20;
     --verde2: #2e7d32;
     --verde3: #66bb6a;
-    --verde4: #e8f5e9;
+    --background: #e8f5e9;
 }
 
 * {
@@ -13,7 +13,7 @@
 }
 
 body {
-    background: var(--verde4);
+    background: var(--background);
     color: #333;
 }
 
