@@ -15,6 +15,7 @@
 body {
     background: var(--background);
     color: #333;
+    height: 100vh;
 }
 
 header {
@@ -48,6 +49,7 @@ main {
     flex-direction: column;
     align-items: center;
     margin-top: 40px;
+    height: 100%;
 }
 
 .card {
@@ -117,5 +119,4 @@ footer {
     color: white;
     text-align: center;
     padding: 25px;
-    margin-top: 40px;
 }
