@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Camelearn - Cronograma</title>
+    <link rel="stylesheet" href="../CSS/Cronograma.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>Camelearn</h1>
+        <p>Gerador de Cronograma de Estudos</p>
+    </header>
+
+    <main>
+
+        <div class="card">
+
+            <h3>Notas das Matérias</h3>
+            <p>Adicione as matérias desejadas</p>
+
+            <div id="materias"></div>
+
+            <button onclick="adicionarMateria()">Adicionar matéria</button>
+
+            <label>Tempo total de estudo (minutos):</label>
+            <input type="number" id="tempo">
+
+            <label>Duração de cada bloco:</label>
+            <select id="bloco">
+                <option value="10">10 minutos</option>
+                <option value="15" selected>15 minutos</option>
+                <option value="20">20 minutos</option>
+                <option value="25">25 minutos</option>
+                <option value="30">30 minutos</option>
+            </select>
+
+            <button onclick="calcularCronograma()">Gerar Cronograma</button>
+
+        </div>
+
+        <div class="resultado" id="resultado"></div>
+
+    </main>
+
+    <script src="../JAVASCRIPT/Cronograma.js"></script>
+
+</body>
+
+</html>
