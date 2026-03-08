@@ -12,9 +12,17 @@
     font-family: Segoe UI, Arial, sans-serif;
 }
 
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
 body {
     background: var(--backgroud);
     height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 header {
@@ -36,7 +44,7 @@ header {
     justify-content: center;
 }
 
-.logo img{
+.logo img {
     height: 50px;
     width: 50px;
 }
@@ -57,7 +65,6 @@ main {
     display: flex;
     align-items: center;
     flex-direction: column;
-    height: 100%;
 }
 
 .titulo {
@@ -84,13 +91,14 @@ main {
     align-items: center;
 }
 
-.trilha-titulo img{
+.trilha-titulo img {
     height: 24px;
     width: 24px;
-    margin: 0 1em ;
+    margin: 0 1em;
     transition: 0.3s;
 }
-.girar{
+
+.girar {
     rotate: 90deg;
 }
 
@@ -167,4 +175,5 @@ footer {
     color: white;
     text-align: center;
     padding: 25px;
+    margin-top: auto;
 }
