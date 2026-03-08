@@ -99,18 +99,18 @@ function calcularCronograma() {
 
 }
 
-document.addEventListener("input", function(e){
+document.addEventListener("input", function (e) {
 
-if(e.target.classList.contains("nota")){
+    if (e.target.classList.contains("nota")) {
 
-if(e.target.value > 10){
-e.target.value = 10;
-}
+        if (e.target.value > 10) {
+            e.target.value = 10;
+        }
 
-if(e.target.value < 0){
-e.target.value = 0;
-}
+        if (e.target.value < 0) {
+            e.target.value = 0;
+        }
 
-}
+    }
 
 });

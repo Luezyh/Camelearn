@@ -22,28 +22,29 @@
     <main>
 
         <div class="card">
+            <div class="notas">
+                <h3>Notas das Matérias</h3>
+                <p>Adicione as matérias desejadas</p>
 
-            <h3>Notas das Matérias</h3>
-            <p>Adicione as matérias desejadas</p>
+                <div id="materias"></div>
 
-            <div id="materias"></div>
+                <button onclick="adicionarMateria()">Adicionar matéria</button>
+            </div>
+            <div class="tempo-estudo">
+                <label>Tempo total de estudo (minutos):</label>
+                <input type="number" id="tempo">
 
-            <button onclick="adicionarMateria()">Adicionar matéria</button>
+                <label>Duração minima de cada sessão:</label>
+                <select id="bloco">
+                    <option value="10">10 minutos</option>
+                    <option value="15" selected>15 minutos</option>
+                    <option value="20">20 minutos</option>
+                    <option value="25">25 minutos</option>
+                    <option value="30">30 minutos</option>
+                </select>
 
-            <label>Tempo total de estudo (minutos):</label>
-            <input type="number" id="tempo">
-
-            <label>Duração de cada bloco:</label>
-            <select id="bloco">
-                <option value="10">10 minutos</option>
-                <option value="15" selected>15 minutos</option>
-                <option value="20">20 minutos</option>
-                <option value="25">25 minutos</option>
-                <option value="30">30 minutos</option>
-            </select>
-
-            <button onclick="calcularCronograma()">Gerar Cronograma</button>
-
+                <button onclick="calcularCronograma()">Gerar Cronograma</button>
+            </div>
         </div>
 
         <div class="resultado" id="resultado"></div>
