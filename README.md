@@ -9,6 +9,6 @@
   - MySQL (8.4 LTS)
 
 ### Clone o repositório
-  https://github.com/Luezyh/Camelearn.git
+  git clone https://github.com/Luezyh/Camelearn.git
   
   
