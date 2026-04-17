@@ -4,8 +4,11 @@
 
 ## Começando
 
-  Para exucatar o projeto localmente , seguir os seguintes passos a abaixo :
+  Para executar o projeto localmente, verifique se sua máquina contém os seguintes requisitos:
+  - Node.js (v25.9.0)
+  - MySQL (8.4 LTS)
 
-  ### Clone o repositório
---- bash
-  gitclone https://luezyh.github.io/Camelearn/
+### Clone o repositório
+  https://github.com/Luezyh/Camelearn.git
+  
+  
