@@ -2,35 +2,43 @@ const express = require('express');
 const path = require('path');
 const mysql = require('mysql2');
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
+
 const porta = 3000;
+const JWT_SECRET = 'sua-chave-secreta-aqui';
+
 
 const app = express();
 app.use(express.json());
 app.use(express.static(__dirname));
 app.use(cors());
+app.use(cookieParser());
 
 const db = mysql.createConnection({
     host: 'localhost',
-    user: 'root', // seu usuário do mysql
-    password: '', // sua senha
+    user: 'root',
+    password: '',
     database: 'camelearn'
 });
 
-//Rota principal para servir o HTML
+//Rota principal 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+//Rota para o cadastro
 app.get('/cadastro', (req, res) => {
     res.sendFile(path.join(__dirname, 'HTML/cadastro.html'));
 });
 
+//Rota para o login
 app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, 'HTML/login.html'));
 });
 
 
-// CREATE - Adicionar usuário
+// Cadastrar o usuário
 app.post('/cadastrar_usuario', (req, res) => {
     const { nome, email, senha } = req.body;
 
@@ -51,6 +59,7 @@ app.post('/cadastrar_usuario', (req, res) => {
     });
 });
 
+// Login do usuário
 app.post('/login_usuario', (req, res) => {
     const { email, senha } = req.body;
 
@@ -60,11 +69,60 @@ app.post('/login_usuario', (req, res) => {
 
         // 2️⃣ Se já existe, bloqueia
         if (rows.length > 0) {
-            return res.status(200).json(rows[0]);
-        } else{
+
+            const token = jwt.sign(
+                { id: rows[0].id, nome: rows[0].nome, email: rows[0].email, pontuacao: rows[0].pontuacao, role: rows[0].role, criado_em: rows[0].criado_em },
+                JWT_SECRET,
+                { expiresIn: '7d' }
+            );
+
+            res.cookie('token', token, {
+                httpOnly: true,
+                sameSite: 'strict',
+                maxAge: 7 * 24 * 60 * 60 * 1000
+            });
+
+            return res.status(200).send('Login bem-sucedido!');
+
+        } else {
             return res.status(401).send('E-mail ou senha incorretos.');
         }
     });
+});
+
+// Rota para obter dados do usuário autenticado
+app.get('/auth/me', (req, res) => {
+    const token = req.cookies.token;
+
+    if (!token) return res.status(401).send('Não autenticado.');
+
+    try {
+        const usuario = jwt.verify(token, JWT_SECRET);
+        return res.json(usuario);
+    } catch (err) {
+        return res.status(401).send('Sessão inválida.');
+    }
+});
+
+app.post('/logout', (req, res) => {
+    res.clearCookie('token');
+    res.send('Logout realizado.');
+});
+
+// Home
+app.get('/home', (req, res) => {
+    const token = req.cookies.token;
+
+    if (!token) {
+        return res.redirect('/login');
+    }
+
+    try {
+        jwt.verify(token, JWT_SECRET);
+        res.sendFile(path.join(__dirname, 'HTML/home.html'));
+    } catch (err) {
+        res.redirect('/login');
+    }
 });
 
 // READ - Listar usuários

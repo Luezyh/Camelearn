@@ -10,8 +10,7 @@ async function Login() {
     });
 
     if (response.ok) {
-        const usuario = await response.json(); 
-        console.log(usuario);
+        window.location.href = '/home';
         document.getElementById('mensagem').textContent = `Bem-vindo, ${usuario.nome}!`;
     } else {
         const errorText = await response.text();

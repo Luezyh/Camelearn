@@ -1,4 +1,20 @@
 
+async function Login(email, senha){
+
+    const response = await fetch('http://localhost:3000/login_usuario', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, senha })
+    });
+
+    if (response.ok) {
+        window.location.href = '/home';
+    } else {
+        const errorText = await response.text();
+        document.getElementById('mensagem').textContent = `Erro: ${errorText}`;
+    }
+}
+
 async function Cadastrar() {
     const nome = document.getElementById('nome').value;
     const email = document.getElementById('email').value;
@@ -12,6 +28,7 @@ async function Cadastrar() {
 
     if (response.ok) {
         document.getElementById('mensagem').textContent = 'Usuário cadastrado com sucesso!';
+        Login(email, senha);
     } else {
         const errorText = await response.text();
         document.getElementById('mensagem').textContent = `Erro: ${errorText}`;
