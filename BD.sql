@@ -1,0 +1,13 @@
+CREATE DATABASE IF NOT EXISTS camelearn;
+
+USE camelearn;
+
+CREATE TABLE IF NOT EXISTS usuarios (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nome VARCHAR(100) NOT NULL,
+  pontuacao INT DEFAULT 0,
+  email VARCHAR(150) NOT NULL UNIQUE,
+  senha VARCHAR(255) NOT NULL,
+  role ENUM('admin', 'aluno') DEFAULT 'aluno',
+  criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
