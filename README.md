@@ -54,7 +54,7 @@ npm install express mysql2 cors jsonwebtoken cookie-parser
 node server.js
 ```
 
-**7. Acesse a aplicação**
+**5. Acesse a aplicação**
 
 Abra o navegador e acesse: `http://localhost:3000`
 
