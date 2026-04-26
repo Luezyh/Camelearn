@@ -18,8 +18,30 @@ app.use(cookieParser());
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '',
-    database: 'camelearn'
+    password: ''
+});
+
+db.query(`CREATE DATABASE IF NOT EXISTS camelearn`, (err) => {
+    if (err) throw err;
+
+    db.query(`USE camelearn`, (err) => {
+        if (err) throw err;
+
+        db.query(`
+      CREATE TABLE IF NOT EXISTS usuarios (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        nome VARCHAR(100) NOT NULL,
+        pontuacao INT DEFAULT 0,
+        email VARCHAR(150) NOT NULL UNIQUE,
+        senha VARCHAR(255) NOT NULL,
+        role ENUM('admin', 'aluno') DEFAULT 'aluno',
+        criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `, (err) => {
+            if (err) throw err;
+            console.log('Banco de dados pronto!');
+        });
+    });
 });
 
 //Rota principal 
@@ -125,6 +147,7 @@ app.get('/home', (req, res) => {
     }
 });
 
+//Rascunhos abaixo!!!
 // READ - Listar usuários
 app.get('/usuarios', (req, res) => {
     db.query('SELECT * FROM usuarios', (err, results) => {
