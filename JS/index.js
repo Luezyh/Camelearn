@@ -1,5 +1,13 @@
 let idEdicao = null;
 
+function cadastro(){
+    window.location.href = '/cadastro';
+}
+
+function login() {
+    window.location.href = '/login';
+}
+
 async function listarUsuarios() {
     const res = await fetch('http://localhost:3000/usuarios');
     const dados = await res.json();
