@@ -12,8 +12,9 @@ A **Camelearn** é uma aplicação web desenvolvida para dar eficiência aos est
 
 ### 🛠️ Tecnologias
 
-- **JavaScript / TypeScript**
+- **JavaScript**
 - **Node.js**
+- **HTML & CSS**
 
 ---
 
@@ -47,28 +48,7 @@ cd camelearn
 npm install express mysql2 cors jsonwebtoken cookie-parser
 ```
 
-**4. Configure o banco de dados** <br>
-Com o MySQL instalado e rodando, execute o arquivo banco.sql para criar o banco e as tabelas:
-
-```bash
-mysql -u root -p < banco.sql
-```
-
-Será solicitada a senha do seu MySQL. Após isso, o banco camelearn estará pronto.
-
-**5. Configure a conexão com o banco**
-No arquivo server.js, atualize as credenciais do MySQL conforme o seu ambiente:
-
-```bash
-javascriptconst connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'sua-senha', // 👈 altere aqui
-  database: 'camelearn'
-});
-```
-
-**6. Inicie o servidor**
+**4. Inicie o servidor**
 
 ```bash
 node server.js
