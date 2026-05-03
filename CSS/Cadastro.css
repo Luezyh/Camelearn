@@ -1,0 +1,215 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+    --verde1:     #054204;
+    --verde2:     #0a6b08;
+    --verde3:     #C0DE78;
+    --carolina:   #55A6C3;
+    --background: #F8FFF7;
+    --white:      #ffffff;
+    --text:       #111b11;
+    --text-muted: #6b7f6b;
+    --border:     #d4e8d4;
+    --shadow:     0 4px 24px rgba(5,66,4,0.10);
+    --grad-hero:  linear-gradient(210deg, var(--verde1) 0%, #0f6e0d 55%, var(--carolina) 100%);
+    --transition: 0.22s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Plus Jakarta Sans', 'Segoe UI', Arial, sans-serif;
+}
+
+body {
+    background: var(--background);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ══ CONTAINER DIVIDIDO ══ */
+.cadastro-container {
+    display: flex;
+    width: 100%;
+    max-width: 900px;
+    min-height: 540px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 12px 48px rgba(5,66,4,0.16);
+    margin: 40px 20px;
+}
+
+/* ══ LADO ESQUERDO – FORMULÁRIO ══ */
+.cadastro-form {
+    flex: 1;
+    background: var(--white);
+    padding: 52px 44px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--verde1);
+    margin-bottom: 28px;
+}
+
+.logo img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
+
+.cadastro-form h1 {
+    font-size: 26px;
+    font-weight: 900;
+    color: var(--verde1);
+    margin-bottom: 6px;
+}
+
+.subtitulo {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+}
+
+/* ══ ERRO ══ */
+.erro {
+    background: #fce8e8;
+    border: 1px solid #f5c6c6;
+    color: #c0392b;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+/* ══ CAMPOS ══ */
+.campo {
+    margin-bottom: 16px;
+    position: relative;
+}
+
+.campo label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--verde1);
+    margin-bottom: 6px;
+}
+
+.campo input {
+    width: 100%;
+    padding: 12px 14px;
+    padding-right: 40px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 15px;
+    background: var(--background);
+    color: var(--text);
+    transition: border-color var(--transition);
+    outline: none;
+}
+
+.campo input:focus {
+    border-color: var(--verde2);
+    background: var(--white);
+}
+
+.campo input::placeholder {
+    color: #aaa;
+}
+
+.campo i {
+    font-size: 18px;
+    cursor: pointer;
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-5%);
+}
+
+/* ══ BOTÃO ══ */
+.botao {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(210deg, var(--verde2), var(--carolina));
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all var(--transition);
+    box-shadow: 0 4px 14px rgba(5,66,4,0.25);
+    margin-bottom: 18px;
+}
+
+.botao:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(5,66,4,0.35);
+}
+
+.cadastro-link {
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.cadastro-link a {
+    color: var(--verde2);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.cadastro-link a:hover { text-decoration: underline; }
+
+/* ══ LADO DIREITO – VISUAL ══ */
+.cadastro-visual {
+    flex: 1;
+    background: var(--grad-hero);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 44px;
+    text-align: center;
+    gap: 20px;
+}
+
+.visual-logo {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+    opacity: 0.80;
+}
+
+.cadastro-visual h2 {
+    font-size: 24px;
+    font-weight: 900;
+    line-height: 1.25;
+}
+
+.cadastro-visual p {
+    font-size: 14px;
+    opacity: 0.75;
+    line-height: 1.7;
+}
+
+/* ══ RESPONSIVO ══ */
+@media (max-width: 640px) {
+    .cadastro-container { flex-direction: column; margin: 0; border-radius: 0; min-height: 100vh; }
+    .cadastro-visual { display: none; }
+    .cadastro-form { padding: 40px 28px; }
+}

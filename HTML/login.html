@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Camelearn</title>
+    <link rel="stylesheet" href="../CSS/Login.css">
+    <link rel="icon" type="image/svg+xml" href="../IMAGES/Logo-Tipo-svg.svg">
+</head>
+
+<body>
+
+    <div class="login-container">
+
+        <!-- Lado esquerdo: formulário -->
+        <div class="login-form">
+
+            <div class="logo">
+                <img src="../IMAGES/Logo-Tipo.png" alt="">
+                Camelearn
+            </div>
+
+            <h1>Bem-vindo de volta</h1>
+            <p class="subtitulo">Acesse sua plataforma de estudos</p>
+
+            <div id="erro" class="erro" style="display: none;">
+                E-mail ou senha incorretos.
+            </div>
+
+            <div class="campo">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="email" placeholder="seu@email.com" required>
+            </div>
+
+            <div class="campo">
+                <label for="senha">Senha</label>
+                <input type="password" id="senha" name="senha" placeholder="••••••••" required>
+            </div>
+
+            <div class="opcoes">
+                <label class="checkbox">
+                    <input type="checkbox" id="manter"> Manter conectado
+                </label>
+                <a href="#">Esqueceu a senha?</a>
+            </div>
+
+            <p id="mensagem" style="display:none;"></p>
+
+            <button class="botao" onclick="fazerLogin()">Entrar na plataforma</button>
+
+            <p class="cadastro-link">
+                Ainda não tem conta? <a href="./Cadastro.html">Criar conta</a>
+            </p>
+
+        </div>
+
+        <!-- Lado direito: visual -->
+        <div class="login-visual">
+            <img src="../IMAGES/Logo-Tipo.png" alt="" class="visual-logo">
+            <h2>Estude com inteligência, não com esforço aleatório.</h2>
+            <p>A Camelearn organiza sua rotina e acompanha seu desempenho automaticamente.</p>
+        </div>
+
+    </div>
+
+    <script src="../JS/login.js"></script>
+</body>
+
+</html>
