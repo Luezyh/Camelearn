@@ -11,7 +11,9 @@ async function Login(email, senha){
         window.location.href = '/home';
     } else {
         const errorText = await response.text();
-        document.getElementById('mensagem').textContent = `Erro: ${errorText}`;
+        const erro = document.getElementById('erro');
+        erro.style.display = 'block';
+        erro.textContent = `Erro: ${errorText}`;
     }
 }
 
@@ -28,16 +30,12 @@ async function Cadastrar() {
 
     if (response.ok) {
         document.getElementById('mensagem').textContent = 'Usuário cadastrado com sucesso!';
+        document.getElementById('mensagem').style.display = 'block';
         Login(email, senha);
     } else {
         const errorText = await response.text();
-        document.getElementById('mensagem').textContent = `Erro: ${errorText}`;
+        const erro = document.getElementById('erro');
+        erro.style.display = 'block';
+        erro.textContent = `Erro: ${errorText}`;
     }
 }
-
-const formulario = document.querySelector('form');
-
-formulario.addEventListener('submit', (event) => {
-    event.preventDefault();
-    Cadastrar();
-});

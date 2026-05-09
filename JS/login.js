@@ -1,5 +1,5 @@
 
-async function Login() {
+async function fazerLogin() {
     const email = document.getElementById('email').value;
     const senha = document.getElementById('senha').value;
 
@@ -11,16 +11,10 @@ async function Login() {
 
     if (response.ok) {
         window.location.href = '/home';
-        document.getElementById('mensagem').textContent = `Bem-vindo, ${usuario.nome}!`;
     } else {
         const errorText = await response.text();
-        document.getElementById('mensagem').textContent = `Erro: ${errorText}`;
+        const erro = document.getElementById('erro');
+        erro.style.display = 'block';
+        erro.textContent = `Erro: ${errorText}`;
     }
 }
-
-const formulario = document.querySelector('form');
-
-formulario.addEventListener('submit', (event) => {
-    event.preventDefault();
-    Login();
-});
