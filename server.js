@@ -11,7 +11,7 @@ const JWT_SECRET = 'sua-chave-secreta-aqui';
 
 const app = express();
 app.use(express.json());
-app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 app.use(cookieParser());
 
@@ -46,17 +46,17 @@ db.query(`CREATE DATABASE IF NOT EXISTS camelearn`, (err) => {
 
 //Rota principal 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(path.join(__dirname, 'public/HTML/index.html'));
 });
 
 //Rota para o cadastro
 app.get('/cadastro', (req, res) => {
-    res.sendFile(path.join(__dirname, 'HTML/cadastro.html'));
+    res.sendFile(path.join(__dirname, 'public/HTML/cadastro.html'));
 });
 
 //Rota para o login
 app.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, 'HTML/login.html'));
+    res.sendFile(path.join(__dirname, 'public/HTML/login.html'));
 });
 
 
@@ -141,7 +141,7 @@ app.get('/home', (req, res) => {
 
     try {
         jwt.verify(token, JWT_SECRET);
-        res.sendFile(path.join(__dirname, 'HTML/home.html'));
+        res.sendFile(path.join(__dirname, '/public/HTML/home.html'));
     } catch (err) {
         res.redirect('/login');
     }
