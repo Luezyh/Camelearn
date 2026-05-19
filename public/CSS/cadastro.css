@@ -159,6 +159,52 @@ body {
     box-shadow: 0 8px 24px rgba(5,66,4,0.35);
 }
 
+.tipo {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+}
+
+.tipo button {
+    flex: 1;
+    padding: 12px;
+    background: var(--background);
+    color: var(--text-muted);
+    border: 1.5px solid var(--border);
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all var(--transition);
+    outline: none;  
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.tipo button .icone-btn{
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    transition: filter var(--transition);
+}
+
+.tipo button:hover {
+    border-color: var(--verde2);
+    color: var(--verde2);
+}
+
+.tipo button.selecionado {
+    background: linear-gradient(50deg, var(--verde1) 0%, #0f6e0d 6%, var(--carolina) 100%);
+    color: white;
+}
+
+.tipo button.selecionado .icone-btn{
+    filter: brightness(0) invert(1);
+}
+
 .cadastro-link {
     text-align: center;
     font-size: 13px;

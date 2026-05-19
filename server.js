@@ -1,12 +1,17 @@
+require('dotenv').config();
+const { createClient } = require('@supabase/supabase-js');
 const express = require('express');
 const path = require('path');
-const mysql = require('mysql2');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 
 const porta = 3000;
 const JWT_SECRET = 'sua-chave-secreta-aqui';
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_ANON_KEY
+)
 
 
 const app = express();
@@ -15,34 +20,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 app.use(cookieParser());
 
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: ''
-});
+async function testarConexao() {
+  const { error } = await supabase.auth.getSession()
 
-db.query(`CREATE DATABASE IF NOT EXISTS camelearn`, (err) => {
-    if (err) throw err;
+  if (error) {
+    console.error('Erro ao conectar ao Supabase:', error.message)
+  } else {
+    console.log('Supabase conectado com sucesso!')
+  }
+}
 
-    db.query(`USE camelearn`, (err) => {
-        if (err) throw err;
+testarConexao()
 
-        db.query(`
-      CREATE TABLE IF NOT EXISTS usuarios (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        nome VARCHAR(100) NOT NULL,
-        pontuacao INT DEFAULT 0,
-        email VARCHAR(150) NOT NULL UNIQUE,
-        senha VARCHAR(255) NOT NULL,
-        role ENUM('admin', 'aluno') DEFAULT 'aluno',
-        criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      )
-    `, (err) => {
-            if (err) throw err;
-            console.log('Banco de dados pronto!');
-        });
-    });
-});
 
 //Rota principal 
 app.get('/', (req, res) => {
@@ -61,69 +50,91 @@ app.get('/login', (req, res) => {
 
 
 // Cadastrar o usuário
-app.post('/cadastrar_usuario', (req, res) => {
-    const { nome, email, senha } = req.body;
+app.post('/cadastrar_usuario', async (req, res) => {
+    const { nome, email, senha, tipo } = req.body;
 
-    // 1️⃣ Consulta antes de salvar
-    db.query('SELECT id FROM usuarios WHERE email = ?', [email], (err, rows) => {
-        if (err) return res.status(500).send(err);
+    //Consulta antes de salvar
+    const { data: usuarioExistente, error: erroConsulta } = await supabase
+        .from('usuarios')
+        .select('id')
+        .eq('email', email)
+        .single()
 
-        // 2️⃣ Se já existe, bloqueia
-        if (rows.length > 0) {
-            return res.status(409).send('E-mail já cadastrado.');
-        }
+    if (erroConsulta && erroConsulta.code !== 'PGRST116') {
+        return res.status(500).send(erroConsulta.message)
+    }
 
-        // 3️⃣ Se não existe, salva
-        db.query('INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?)', [nome, email, senha], (err) => {
-            if (err) return res.status(500).send(err);
-            res.send('Usuário cadastrado!');
-        });
-    });
+    //Se já existe, bloqueia
+    if (usuarioExistente) {
+        return res.status(409).send('E-mail já cadastrado.')
+    }
+
+    //Se não existe, salva
+    const { error: erroInsert } = await supabase
+        .from('usuarios')
+        .insert({ nome, email, senha, tipo })
+
+    if (erroInsert) return res.status(500).send(erroInsert.message)
+
+    res.send('Usuário cadastrado!')
 });
 
 // Login do usuário
-app.post('/login_usuario', (req, res) => {
+app.post('/login_usuario', async (req, res) => {
     const { email, senha } = req.body;
 
-    // 1️⃣ Consulta antes de salvar
-    db.query('SELECT id, nome, email, pontuacao, role, criado_em FROM usuarios WHERE email = ? AND senha = ?', [email, senha], (err, rows) => {
-        if (err) return res.status(500).send(err);
+    // Consulta o usuário pelo email e senha
+    const { data: usuario, error } = await supabase
+        .from('usuarios')
+        .select('id, nome, email, tipo, criado_em')
+        .eq('email', email)
+        .eq('senha', senha)
+        .single()
 
-        // 2️⃣ Se já existe, bloqueia
-        if (rows.length > 0) {
+    if (error && error.code !== 'PGRST116') {
+        return res.status(500).send(error.message)
+    }
 
-            const token = jwt.sign(
-                { id: rows[0].id, nome: rows[0].nome, email: rows[0].email, pontuacao: rows[0].pontuacao, role: rows[0].role, criado_em: rows[0].criado_em },
-                JWT_SECRET,
-                { expiresIn: '7d' }
-            );
+    // Se não encontrou, bloqueia
+    if (!usuario) {
+        return res.status(401).send('E-mail ou senha incorretos.')
+    }
 
-            res.cookie('token', token, {
-                httpOnly: true,
-                sameSite: 'strict',
-                maxAge: 7 * 24 * 60 * 60 * 1000
-            });
+    // Se encontrou, gera o token
+    const token = jwt.sign(
+        { id: usuario.id, nome: usuario.nome, email: usuario.email, tipo: usuario.tipo, criado_em: usuario.criado_em },
+        JWT_SECRET,
+        { expiresIn: '7d' }
+    );
 
-            return res.status(200).send('Login bem-sucedido!');
-
-        } else {
-            return res.status(401).send('E-mail ou senha incorretos.');
-        }
+    res.cookie('token', token, {
+        httpOnly: true,
+        sameSite: 'strict',
+        maxAge: 7 * 24 * 60 * 60 * 1000
     });
+
+    return res.status(200).send('Login bem-sucedido!');
 });
 
-// Rota para obter dados do usuário autenticado
-app.get('/auth/me', (req, res) => {
+function obterUsuario(req) {
     const token = req.cookies.token;
 
-    if (!token) return res.status(401).send('Não autenticado.');
+    if (!token) return null;
 
     try {
-        const usuario = jwt.verify(token, JWT_SECRET);
-        return res.json(usuario);
+        return jwt.verify(token, JWT_SECRET);
     } catch (err) {
-        return res.status(401).send('Sessão inválida.');
+        return null;
     }
+}
+
+// Home
+app.get('/home', (req, res) => {
+    const usuario = obterUsuario(req);
+
+    if (!usuario) return res.redirect('/login');
+
+    res.sendFile(path.join(__dirname, 'public/HTML/home_'+usuario.tipo+'.html'));
 });
 
 app.post('/logout', (req, res) => {
@@ -131,46 +142,27 @@ app.post('/logout', (req, res) => {
     res.send('Logout realizado.');
 });
 
-// Home
-app.get('/home', (req, res) => {
-    const token = req.cookies.token;
-
-    if (!token) {
-        return res.redirect('/login');
-    }
-
-    try {
-        jwt.verify(token, JWT_SECRET);
-        res.sendFile(path.join(__dirname, '/public/HTML/home.html'));
-    } catch (err) {
-        res.redirect('/login');
-    }
+app.get('/tarefas', async (req, res) => {
+    const usuario = obterUsuario(req);
+    if (!usuario) return res.status(401).send('Não autorizado.');
+    const { data: tarefas, error } = await supabase
+        .from('tarefas')
+        .select('*')
+        .eq('usuario_id', usuario.id)
+        .order('data_inicio', { ascending: true })
+    if (error) return res.status(500).send(error.message);
+    res.json(tarefas);
 });
 
-//Rascunhos abaixo!!!
-// READ - Listar usuários
-app.get('/usuarios', (req, res) => {
-    db.query('SELECT * FROM usuarios', (err, results) => {
-        if (err) return res.status(500).send(err);
-        res.json(results);
-    });
-});
-
-// UPDATE - Editar usuário
-app.put('/usuarios/:id', (req, res) => {
-    const { nome, email, senha } = req.body;
-    db.query('UPDATE usuarios SET nome = ?, email = ?, senha = ? WHERE id = ?', [nome, email, senha, req.params.id], (err) => {
-        if (err) return res.status(500).send(err);
-        res.send('Atualizado com sucesso!');
-    });
-});
-
-// DELETE - Remover usuário
-app.delete('/usuarios/:id', (req, res) => {
-    db.query('DELETE FROM usuarios WHERE id = ?', [req.params.id], (err) => {
-        if (err) return res.status(500).send(err);
-        res.send('Removido com sucesso!');
-    });
+app.post('/criar_tarefa', async (req, res) => {
+    const usuario = obterUsuario(req);
+    if (usuario.tipo !== 'professor') return res.status(401).send('Não autorizado.');
+    const { titulo, descricao, data } = req.body;
+    const { error } = await supabase
+        .from('tarefas')
+        .insert({ usuario_id: usuario.id, titulo, descricao, data });
+    if (error) return res.status(500).send(error.message);
+    res.send('Tarefa criada!');
 });
 
 app.listen(porta, () => console.log(`Servidor rodando em http://localhost:${porta}`));

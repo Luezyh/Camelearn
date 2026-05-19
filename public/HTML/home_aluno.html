@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Camelearn</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="../CSS/home_aluno.css">
+  <link rel="stylesheet" href="../CSS/agenda.css">
+</head>
+
+<body>
+
+  <div class="cl-wrap">
+
+    <!-- SIDEBAR -->
+    <aside class="cl-sidebar" id="sidebar">
+
+      <button class="cl-toggle-btn" id="toggleBtn">
+        <i class="ti ti-menu-2" aria-hidden="true"></i>
+      </button>
+
+      <nav class="cl-nav">
+        <button class="cl-nav-item active" onclick="MudarSecao('inicio')">
+          <img src="../assets/inicio.png"><span>Início</span>
+        </button>
+        <button class="cl-nav-item" onclick="MudarSecao('agenda')">
+          <img src="../assets/agenda.png"><span>Agenda</span>
+        </button>
+        <button class="cl-nav-item" onclick="MudarSecao('estudos')">
+          <img src="../assets/cronograma.png"><span>Estudos</span>
+        </button>
+      </nav>
+
+    </aside>
+
+    <!-- RIGHT PANEL -->
+    <div class="cl-right">
+
+      <!-- TOPBAR -->
+      <header class="cl-topbar">
+        <div class="cl-topbar-right">
+
+          <!-- AVATAR BUTTON + DROPDOWN -->
+          <div class="cl-dropdown-wrap" id="avatarWrap">
+            <div class="cl-icon-btn cl-avatar-btn" id="avatarBtn" aria-label="Perfil" aria-expanded="false">
+              <i class="ti ti-user" aria-hidden="true"></i>
+            </div>
+            <div class="cl-dropdown cl-profile-dropdown" id="avatarDropdown" aria-hidden="true">
+              <div class="cl-profile-header">
+                <div class="cl-profile-avatar"><i class="ti ti-user"></i></div>
+                <div>
+                  <p class="cl-profile-name">Nome do aluno</p>
+                  <p class="cl-profile-email">aluno@email.com</p>
+                </div>
+              </div>
+              <ul class="cl-profile-menu">
+                <li><a href="perfil.html" class="cl-profile-item"><i class="ti ti-user-circle"></i><span>Meu
+                      perfil</span></a></li>
+                <li><a href="configuracoes.html" class="cl-profile-item"><i
+                      class="ti ti-settings"></i><span>Configurações</span></a></li>
+              </ul>
+              <div class="cl-profile-footer">
+                <a href="login.html" class="cl-profile-logout"><i class="ti ti-logout"></i><span>Sair da
+                    conta</span></a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </header>
+
+      <!-- PLACEHOLDER -->
+      <div class="cl-body">
+
+        <section class="show" id="inicio">
+          <h1>Bem-vindo, aluno!</h1>
+        </section>
+
+        <section id="agenda">
+          <div class="agenda">
+            <div class="topbar">
+              <div class="week-nav">
+                <button onclick="mudarSemana(-1)">← Anterior</button>
+                <span class="week-label" id="week-label"></span>
+                <button onclick="mudarSemana(1)">Próxima →</button>
+              </div>
+            </div>
+
+            <div class="calendar-wrap">
+              <div class="calendar">
+                <div class="cal-header" id="cal-header"></div>
+                <div class="cal-body" id="cal-body"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="estudos">
+          <div class="topbar">
+            <button class="btn-add" onclick="abrirModal()">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              Add sessão
+            </button>
+          </div>
+
+          <div class="calendar-wrap">
+            <div class="calendar">
+              <div class="cal-header" id="session-cal-header"></div>
+              <div class="cal-body" id="session-cal-body"></div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- OVERLAY for dropdowns -->
+  <div class="cl-overlay" id="overlay"></div>
+
+  <script src="../JS/home_aluno.js"></script>
+</body>
+
+</html>

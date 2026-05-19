@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Camelearn</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="../CSS/home_professor.css">
+</head>
+
+<body>
+
+  <div class="cl-wrap">
+
+    <!-- SIDEBAR -->
+    <aside class="cl-sidebar" id="sidebar">
+
+      <button class="cl-toggle-btn" id="toggleBtn">
+        <i class="ti ti-menu-2" aria-hidden="true"></i>
+      </button>
+
+      <nav class="cl-nav">
+        <button class="cl-nav-item" onclick="MudarSecao('inicio')">
+          <img src=""><span>Início</span>
+        </button>
+        <button class="cl-nav-item" onclick="MudarSecao('agenda')">
+          <img src=""><span>Agenda</span>
+        </button>
+        <button class="cl-nav-item" onclick="MudarSecao('estudos')">
+          <img src=""><span>Estudos</span>
+        </button>
+      </nav>
+
+    </aside>
+
+    <!-- RIGHT PANEL -->
+    <div class="cl-right">
+
+      <!-- TOPBAR -->
+      <header class="cl-topbar">
+        <div class="cl-topbar-right">
+
+          <!-- AVATAR BUTTON + DROPDOWN -->
+          <div class="cl-dropdown-wrap" id="avatarWrap">
+            <div class="cl-icon-btn cl-avatar-btn" id="avatarBtn" aria-label="Perfil" aria-expanded="false">
+              <i class="ti ti-user" aria-hidden="true"></i>
+            </div>
+            <div class="cl-dropdown cl-profile-dropdown" id="avatarDropdown" aria-hidden="true">
+              <div class="cl-profile-header">
+                <div class="cl-profile-avatar"><i class="ti ti-user"></i></div>
+                <div>
+                  <p class="cl-profile-name">Nome do aluno</p>
+                  <p class="cl-profile-email">aluno@email.com</p>
+                </div>
+              </div>
+              <ul class="cl-profile-menu">
+                <li><a href="perfil.html" class="cl-profile-item"><i class="ti ti-user-circle"></i><span>Meu
+                      perfil</span></a></li>
+                <li><a href="configuracoes.html" class="cl-profile-item"><i
+                      class="ti ti-settings"></i><span>Configurações</span></a></li>
+              </ul>
+              <div class="cl-profile-footer">
+                <a href="login.html" class="cl-profile-logout"><i class="ti ti-logout"></i><span>Sair da
+                    conta</span></a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </header>
+
+      <!-- PLACEHOLDER -->
+      <div class="cl-body">
+        <section class="inicio" id="inicio">
+
+        </section>
+
+        <section class="turmas" id="turmas">
+
+        </section>
+
+        <section class="materias" id="materias">
+
+        </section>
+
+        <section class="tarefas" id="tarefas">
+
+        </section>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- OVERLAY for dropdowns -->
+  <div class="cl-overlay" id="overlay"></div>
+
+  <script src="../JS/home_professor.js"></script>
+</body>
+
+</html>
