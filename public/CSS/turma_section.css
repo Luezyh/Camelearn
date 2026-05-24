@@ -1,0 +1,414 @@
+/* ── Reset ─────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Variáveis ─────────────────────────────────────────── */
+:root {
+  --green:        #2e7d52;
+  --green-mid:    #4caf7d;
+  --green-soft:   #eef6f1;
+  --green-border: #c8e0d3;
+  --text-dark:    #1a2e24;
+  --text-mid:     #52705f;
+  --text-light:   #96b3a4;
+  --bg:           #ffffff;
+  --bg-header:    #f9fcfa;
+  --radius:       8px;
+  --ease:         .2s ease;
+}
+
+/* ── Demo wrapper ──────────────────────────────────────── */
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: #edf2ee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.demo-card {
+  width: 800px;
+  height: 580px;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,.09);
+}
+
+/* ── Section ───────────────────────────────────────────── */
+.turma-section {
+  width: 100%;
+  height: 100%;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── Cabeçalho ─────────────────────────────────────────── */
+.turma-header {
+  background: var(--bg-header);
+  border-bottom: 1px solid var(--green-border);
+  padding: 18px 22px 0;
+  flex-shrink: 0;
+}
+
+.turma-header-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.turma-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius);
+  background: var(--green);
+  color: #fff;
+  font-size: .75rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  letter-spacing: .02em;
+}
+
+.turma-meta h2 {
+  font-size: .92rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  line-height: 1.3;
+}
+
+.turma-meta span {
+  font-size: .75rem;
+  color: var(--text-light);
+}
+
+/* ── Tab bar ───────────────────────────────────────────── */
+.tab-bar {
+  display: flex;
+  gap: 2px;
+}
+
+.tab-btn {
+  padding: 9px 16px;
+  font-size: .82rem;
+  font-weight: 500;
+  font-family: inherit;
+  color: var(--text-light);
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: color var(--ease);
+}
+
+.tab-btn::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--green);
+  border-radius: 2px 2px 0 0;
+  transform: scaleX(0);
+  transition: transform var(--ease);
+}
+
+.tab-btn:hover { color: var(--text-mid); }
+
+.tab-btn.active {
+  color: var(--green);
+}
+
+.tab-btn.active::after {
+  transform: scaleX(1);
+}
+
+/* ── Conteúdo ──────────────────────────────────────────── */
+.tab-content {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.tab-panel {
+  position: absolute;
+  inset: 0;
+  padding: 18px 22px;
+  overflow-y: auto;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(6px);
+  transition: opacity var(--ease), transform var(--ease);
+}
+
+.tab-panel.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.tab-panel::-webkit-scrollbar { width: 4px; }
+.tab-panel::-webkit-scrollbar-track { background: transparent; }
+.tab-panel::-webkit-scrollbar-thumb {
+  background: var(--green-border);
+  border-radius: 4px;
+}
+
+/* ── Cartão genérico ───────────────────────────────────── */
+.card {
+  border: 1px solid var(--green-border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  transition: box-shadow var(--ease);
+}
+
+.card:hover {
+  box-shadow: 0 2px 12px rgba(46,125,82,.08);
+}
+
+/* ── Mural ─────────────────────────────────────────────── */
+.card-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.tag {
+  font-size: .68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+
+.tag-aviso {
+  background: var(--green-soft);
+  color: var(--green);
+  border: 1px solid var(--green-border);
+}
+
+.tag-tarefa {
+  background: #fffbeb;
+  color: #92600a;
+  border: 1px solid #f0d89a;
+}
+
+.card-autor {
+  font-size: .75rem;
+  color: var(--text-light);
+  margin-left: auto;
+}
+
+.card h3 {
+  font-size: .87rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 4px;
+}
+
+.card p {
+  font-size: .8rem;
+  color: var(--text-mid);
+  line-height: 1.55;
+  margin-bottom: 8px;
+}
+
+.card-date {
+  font-size: .7rem;
+  color: var(--text-light);
+}
+
+/* ── Tarefas ───────────────────────────────────────────── */
+.tarefa-card { cursor: pointer; }
+
+.tarefa-head {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.tarefa-checkbox {
+  width: 17px;
+  height: 17px;
+  border: 2px solid var(--green-border);
+  border-radius: 4px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--ease), border-color var(--ease);
+}
+
+.tarefa-checkbox.done {
+  background: var(--green);
+  border-color: var(--green);
+}
+
+.tarefa-checkbox.done::after {
+  content: '';
+  width: 4px;
+  height: 8px;
+  border: 2px solid #fff;
+  border-top: none;
+  border-left: none;
+  transform: rotate(42deg) translateY(-1px);
+}
+
+.tarefa-info { flex: 1; }
+
+.tarefa-info h3 {
+  font-size: .87rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 3px;
+}
+
+.tarefa-info p {
+  font-size: .78rem;
+  color: var(--text-mid);
+  margin-bottom: 0;
+}
+
+.tarefa-meta {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.prazo, .materia {
+  font-size: .7rem;
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+
+.prazo {
+  background: var(--green-soft);
+  color: var(--green);
+  border: 1px solid var(--green-border);
+}
+
+.prazo.urgente {
+  background: #fff4ec;
+  color: #c05000;
+  border-color: #f0c090;
+}
+
+.materia {
+  background: #f4f4f4;
+  color: var(--text-mid);
+  border: 1px solid #e4e4e4;
+}
+
+/* ── Usuários ──────────────────────────────────────────── */
+.usuarios-search {
+  width: 100%;
+  padding: 8px 12px;
+  font-family: inherit;
+  font-size: .82rem;
+  border: 1px solid var(--green-border);
+  border-radius: var(--radius);
+  background: var(--green-soft);
+  color: var(--text-dark);
+  outline: none;
+  margin-bottom: 14px;
+  transition: border-color var(--ease), box-shadow var(--ease);
+}
+
+.usuarios-search:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(46,125,82,.08);
+}
+
+.usuarios-search::placeholder { color: var(--text-light); }
+
+.group-label {
+  font-size: .68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--text-light);
+  margin: 12px 0 6px;
+}
+
+.group-label:first-child { margin-top: 0; }
+
+.usuario-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 10px;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  margin-bottom: 4px;
+  transition: background var(--ease), border-color var(--ease);
+}
+
+.usuario-item:hover {
+  background: var(--green-soft);
+  border-color: var(--green-border);
+}
+
+.user-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .72rem;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+  letter-spacing: .02em;
+}
+
+.user-info { flex: 1; }
+
+.user-info strong {
+  display: block;
+  font-size: .84rem;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.user-info span {
+  font-size: .73rem;
+  color: var(--text-light);
+}
+
+.user-role {
+  font-size: .68rem;
+  font-weight: 600;
+  padding: 2px 9px;
+  border-radius: 20px;
+}
+
+.user-role.professor {
+  background: var(--green-soft);
+  color: var(--green);
+  border: 1px solid var(--green-border);
+}
+
+.user-role.aluno {
+  background: #f4f4f4;
+  color: var(--text-mid);
+  border: 1px solid #e4e4e4;
+}
+
+/* ── Empty state ───────────────────────────────────────── */
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+  font-size: .82rem;
+  color: var(--text-light);
+}

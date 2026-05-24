@@ -13,6 +13,7 @@
     rel="stylesheet">
   <link rel="stylesheet" href="../CSS/home_aluno.css">
   <link rel="stylesheet" href="../CSS/agenda.css">
+  <link rel="stylesheet" href="../CSS/estudos.css">
 </head>
 
 <body>
@@ -102,33 +103,56 @@
           </div>
         </section>
 
-        <section id="estudos">
-          <div class="topbar">
-            <button class="btn-add" onclick="abrirModal()">
-              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                <line x1="12" y1="5" x2="12" y2="19" />
-                <line x1="5" y1="12" x2="19" y2="12" />
-              </svg>
-              Add sessão
-            </button>
+        <section class="cronograma-section" id="estudos">
+
+          <div class="cronograma-header">
+            <h1>Cronograma de estudos</h1>
+            <button class="btn-add" id="btn-add">+ Add sessão</button>
           </div>
 
-          <div class="calendar-wrap">
-            <div class="calendar">
-              <div class="cal-header" id="session-cal-header"></div>
-              <div class="cal-body" id="session-cal-body"></div>
+          <div class="semana-grid" id="semana-grid">
+            <div class="dia-col">
+              <div class="dia-col-header">Seg</div>
+              <div class="dia-col-body">
+                <div class="sessao">
+                  <div class="sessao-info">
+                    <p class="sessao-materia">Matemática</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
+
         </section>
+
       </div>
-
     </div>
-  </div>
 
-  <!-- OVERLAY for dropdowns -->
-  <div class="cl-overlay" id="overlay"></div>
+    <!-- OVERLAY for dropdowns -->
+    <div class="cl-overlay" id="overlay"></div>
 
-  <script src="../JS/home_aluno.js"></script>
+    <div class="modal-overlay" id="modal-sessao">
+      <div class="modal">
+        <div class="modal-header">
+          <h2>Nova sessão</h2>
+          <button class="modal-close" id="modal-fechar">&times;</button>
+        </div>
+        <div class="modal-body">
+          <label>Matéria
+            <input type="text" id="modal-materia" placeholder="Ex: Matemática" />
+          </label>
+          <label>Dia
+            <select id="modal-dia"></select>
+          </label>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-cancel" id="modal-cancelar">Cancelar</button>
+          <button class="btn-confirm" id="modal-confirmar">Adicionar</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="../JS/home_aluno.js"></script>
 </body>
 
 </html>

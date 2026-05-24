@@ -9,8 +9,8 @@ const cookieParser = require('cookie-parser');
 const porta = 3000;
 const JWT_SECRET = 'sua-chave-secreta-aqui';
 const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_ANON_KEY
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_ANON_KEY
 )
 
 
@@ -21,35 +21,41 @@ app.use(cors());
 app.use(cookieParser());
 
 async function testarConexao() {
-  const { error } = await supabase.auth.getSession()
+    const { error } = await supabase.auth.getSession()
 
-  if (error) {
-    console.error('Erro ao conectar ao Supabase:', error.message)
-  } else {
-    console.log('Supabase conectado com sucesso!')
-  }
+    if (error) {
+        console.error('Erro ao conectar ao Supabase:', error.message)
+    } else {
+        console.log('Supabase conectado com sucesso!')
+    }
 }
 
 testarConexao()
 
+function obterUsuario(req) {
+    const token = req.cookies.token;
 
-//Rota principal 
+    if (!token) return null;
+
+    try {
+        return jwt.verify(token, JWT_SECRET);
+    } catch (err) {
+        return null;
+    }
+}
+
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/HTML/index.html'));
 });
 
-//Rota para o cadastro
 app.get('/cadastro', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/HTML/cadastro.html'));
 });
 
-//Rota para o login
 app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/HTML/login.html'));
 });
 
-
-// Cadastrar o usuário
 app.post('/cadastrar_usuario', async (req, res) => {
     const { nome, email, senha, tipo } = req.body;
 
@@ -79,7 +85,6 @@ app.post('/cadastrar_usuario', async (req, res) => {
     res.send('Usuário cadastrado!')
 });
 
-// Login do usuário
 app.post('/login_usuario', async (req, res) => {
     const { email, senha } = req.body;
 
@@ -116,30 +121,24 @@ app.post('/login_usuario', async (req, res) => {
     return res.status(200).send('Login bem-sucedido!');
 });
 
-function obterUsuario(req) {
-    const token = req.cookies.token;
-
-    if (!token) return null;
-
-    try {
-        return jwt.verify(token, JWT_SECRET);
-    } catch (err) {
-        return null;
-    }
-}
-
-// Home
 app.get('/home', (req, res) => {
     const usuario = obterUsuario(req);
 
     if (!usuario) return res.redirect('/login');
 
-    res.sendFile(path.join(__dirname, 'public/HTML/home_'+usuario.tipo+'.html'));
+    res.sendFile(path.join(__dirname, 'public/HTML/home_' + usuario.tipo + '.html'));
 });
 
-app.post('/logout', (req, res) => {
-    res.clearCookie('token');
-    res.send('Logout realizado.');
+app.get('/turmas/:id', async (req, res) => {
+    const usuario = obterUsuario(req);
+    if (!usuario) return res.status(401).send('Não autorizado.');
+    const { data: turma, error } = await supabase
+        .from('turmas')
+        .select('*')
+        .eq('id', req.params.id)
+        .single();
+    if (error) return res.status(500).send(error.message);
+    res.json(turma);
 });
 
 app.get('/tarefas', async (req, res) => {
@@ -154,6 +153,63 @@ app.get('/tarefas', async (req, res) => {
     res.json(tarefas);
 });
 
+app.get('/sessoes', async (req, res) => {
+    const usuario = obterUsuario(req);
+
+    if (!usuario) return res.status(401).send('Não autorizado.');
+
+    const { data: sessoes, error } = await supabase
+        .from('sessoes')
+        .select('*')
+        .eq('usuario_id', usuario.id);
+
+
+    if (error) return res.status(500).send(error.message);
+    res.json(sessoes);
+});
+
+app.post('/sessoes', async (req, res) => {
+  const usuario = obterUsuario(req);
+  if (!usuario) return res.status(401).send('Não autorizado.');
+  const { materia, dia } = req.body;
+  const { data, error } = await supabase
+    .from('sessoes')
+    .insert({ usuario_id: usuario.id, materia, dia })
+    .select()
+    .single();
+  if (error) return res.status(500).send(error.message);
+  res.json(data);
+});
+
+app.delete('/sessoes/:id', async (req, res) => {
+  const usuario = obterUsuario(req);
+  if (!usuario) return res.status(401).send('Não autorizado.');
+  const { error } = await supabase
+    .from('sessoes')
+    .delete()
+    .eq('id', req.params.id)
+    .eq('usuario_id', usuario.id);
+  if (error) return res.status(500).send(error.message);
+  res.sendStatus(200);
+});
+
+app.patch('/sessoes/:id', async (req, res) => {
+  const usuario = obterUsuario(req);
+  if (!usuario) return res.status(401).send('Não autorizado.');
+
+  const { id } = req.params;
+  const { dia } = req.body;
+
+  const { error } = await supabase
+    .from('sessoes')
+    .update({ dia })
+    .eq('id', id)
+    .eq('usuario_id', usuario.id);
+
+  if (error) return res.status(500).send(error.message);
+  res.sendStatus(200);
+});
+
 app.post('/criar_tarefa', async (req, res) => {
     const usuario = obterUsuario(req);
     if (usuario.tipo !== 'professor') return res.status(401).send('Não autorizado.');
@@ -163,6 +219,11 @@ app.post('/criar_tarefa', async (req, res) => {
         .insert({ usuario_id: usuario.id, titulo, descricao, data });
     if (error) return res.status(500).send(error.message);
     res.send('Tarefa criada!');
+});
+
+app.post('/logout', (req, res) => {
+    res.clearCookie('token');
+    res.send('Logout realizado.');
 });
 
 app.listen(porta, () => console.log(`Servidor rodando em http://localhost:${porta}`));

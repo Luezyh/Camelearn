@@ -12,6 +12,8 @@
     href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="../CSS/home_professor.css">
+  <link rel="stylesheet" href="../CSS/turma_section.css">
+  <link rel="stylesheet" href="../CSS/turmas_section.css">
 </head>
 
 <body>
@@ -27,13 +29,10 @@
 
       <nav class="cl-nav">
         <button class="cl-nav-item" onclick="MudarSecao('inicio')">
-          <img src=""><span>Início</span>
+          <img src="../assets/inicio.png"><span>Início</span>
         </button>
-        <button class="cl-nav-item" onclick="MudarSecao('agenda')">
-          <img src=""><span>Agenda</span>
-        </button>
-        <button class="cl-nav-item" onclick="MudarSecao('estudos')">
-          <img src=""><span>Estudos</span>
+        <button class="cl-nav-item" onclick="MudarSecao('turmas-section')">
+          <img src=""><span>Turmas</span>
         </button>
       </nav>
 
@@ -75,22 +74,286 @@
         </div>
       </header>
 
-      <!-- PLACEHOLDER -->
       <div class="cl-body">
         <section class="inicio" id="inicio">
+          <h1>Bem-vindo, Professor!</h1>
+        </section>
+
+        <section class="turmas-section" id="turmas-section">
+
+          <div class="turmas-header">
+            <div>
+              <h1>Turmas</h1>
+              <span>Selecione uma turma para acessar</span>
+            </div>
+            <input class="turmas-search" type="search" placeholder="Buscar turma..." id="search-turmas"
+              oninput="filtrarTurmas(this.value)" />
+          </div>
+
+          <div class="turmas-grid" id="turmas-grid">
+
+            <div class="turma-card" data-nome="9º Ano A" onclick="abrirTurma(id)">
+              <div class="turma-card-top" style="background: #2e7d52;">
+                <span class="turma-sigla">9ºA</span>
+                <span class="turma-nome">9º Ano A</span>
+              </div>
+            </div>
+
+            <div class="turma-card" data-nome="9º Ano A" onclick="abrirTurma(id)">
+              <div class="turma-card-top" style="background: #2e7d52;">
+                <span class="turma-sigla">9ºA</span>
+                <span class="turma-nome">9º Ano A</span>
+              </div>
+            </div>
+
+            <div class="turma-card" data-nome="9º Ano A" onclick="abrirTurma(id)">
+              <div class="turma-card-top" style="background: #2e7d52;">
+                <span class="turma-sigla">9ºA</span>
+                <span class="turma-nome">9º Ano A</span>
+              </div>
+            </div>
+
+            <div class="turma-card" data-nome="9º Ano A" onclick="abrirTurma(id)">
+              <div class="turma-card-top" style="background: #2e7d52;">
+                <span class="turma-sigla">9ºA</span>
+                <span class="turma-nome">9º Ano A</span>
+              </div>
+            </div>
+
+            <div class="turma-card" data-nome="9º Ano A" onclick="abrirTurma(id)">
+              <div class="turma-card-top" style="background: #2e7d52;">
+                <span class="turma-sigla">9ºA</span>
+                <span class="turma-nome">9º Ano A</span>
+              </div>
+            </div>
+
+            <div class="turma-card" data-nome="9º Ano A" onclick="abrirTurma(id)">
+              <div class="turma-card-top" style="background: #2e7d52;">
+                <span class="turma-sigla">9ºA</span>
+                <span class="turma-nome">9º Ano A</span>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="empty-state" id="empty-turmas" style="display:none">
+            Nenhuma turma encontrada.
+          </div>
 
         </section>
 
-        <section class="turmas" id="turmas">
+        <section class="turma-section" id="turma-section">
+          <!-- Cabeçalho -->
+          <div class="turma-header">
+            <div class="turma-header-top">
+              <div class="turma-avatar">9ºA</div>
+              <div class="turma-meta">
+                <h2>9º Ano A — Ensino Fundamental</h2>
+                <span>Colégio Caminhos e Colinas · 2026</span>
+              </div>
+            </div>
 
-        </section>
+            <!-- Abas -->
+            <nav class="tab-bar" role="tablist">
+              <button class="tab-btn active" role="tab" data-tab="mural" aria-selected="true">Mural</button>
+              <button class="tab-btn" role="tab" data-tab="tarefas" aria-selected="false">Tarefas</button>
+              <button class="tab-btn" role="tab" data-tab="usuarios" aria-selected="false">Usuários</button>
+            </nav>
+          </div>
 
-        <section class="materias" id="materias">
+          <!-- Painéis -->
+          <div class="tab-content">
 
-        </section>
+            <!-- MURAL -->
+            <div class="tab-panel active" id="panel-mural" role="tabpanel">
 
-        <section class="tarefas" id="tarefas">
+              <div class="card">
+                <div class="card-head">
+                  <span class="tag tag-aviso">Aviso</span>
+                  <span class="card-autor">Prof.ª Ana Silva</span>
+                </div>
+                <h3>Reunião de pais e mestres</h3>
+                <p>A reunião acontecerá na próxima sexta-feira, dia 30/05, às 18h no auditório principal. Presença
+                  obrigatória.</p>
+                <span class="card-date">23/05/2026</span>
+              </div>
 
+              <div class="card">
+                <div class="card-head">
+                  <span class="tag tag-tarefa">Tarefa</span>
+                  <span class="card-autor">Prof. Carlos Lima</span>
+                </div>
+                <h3>Redação — A tecnologia e o futuro</h3>
+                <p>Entregar a redação de no mínimo 30 linhas até segunda-feira.</p>
+                <span class="card-date">22/05/2026 · 14:30</span>
+              </div>
+
+              <div class="card">
+                <div class="card-head">
+                  <span class="tag tag-aviso">Aviso</span>
+                  <span class="card-autor">Prof.ª Ana Silva</span>
+                </div>
+                <h3>Alteração de horário — Matemática</h3>
+                <p>A aula de quinta-feira será adiantada para as 7h20 devido ao conselho de classe.</p>
+                <span class="card-date">21/05/2026 · 11:00</span>
+              </div>
+
+              <div class="card">
+                <div class="card-head">
+                  <span class="tag tag-tarefa">Tarefa</span>
+                  <span class="card-autor">Prof.ª Beatriz Nunes</span>
+                </div>
+                <h3>Lista de exercícios — Funções</h3>
+                <p>Completar os exercícios 1 a 15 do capítulo 7 do livro didático. Prazo: 27/05.</p>
+                <span class="card-date">20/05/2026 · 08:45</span>
+              </div>
+
+              <div class="card">
+                <div class="card-head">
+                  <span class="tag tag-aviso">Aviso</span>
+                  <span class="card-autor">Coordenação</span>
+                </div>
+                <h3>Mostra Cultural 2026</h3>
+                <p>Inscrições abertas. Grupos de até 5 alunos. Prazo: 01/06.</p>
+                <span class="card-date">19/05/2026 · 16:00</span>
+              </div>
+
+            </div>
+
+            <!-- TAREFAS -->
+            <div class="tab-panel" id="panel-tarefas" role="tabpanel">
+
+              <div class="card tarefa-card" onclick="toggleTarefa(this)">
+                <div class="tarefa-head">
+                  <div class="tarefa-info">
+                    <h3>Redação — A tecnologia e o futuro</h3>
+                    <p>Mínimo 30 linhas. Salvar em PDF e enviar pelo sistema.</p>
+                    <div class="tarefa-meta">
+                      <span class="materia">Português</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card tarefa-card">
+                <div class="tarefa-head">
+                  <div class="tarefa-info">
+                    <h3>Lista de exercícios — Funções</h3>
+                    <p>Exercícios 1 a 15 do capítulo 7.</p>
+                    <div class="tarefa-meta">
+                      <span class="materia">Matemática</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card tarefa-card">
+                <div class="tarefa-head">
+                  <div class="tarefa-info">
+                    <h3>Pesquisa — Biomas brasileiros</h3>
+                    <p>Apresentação em grupo, mínimo 10 slides.</p>
+                    <div class="tarefa-meta">
+                      <span class="materia">Ciências</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- USUÁRIOS -->
+            <div class="tab-panel" id="panel-usuarios" role="tabpanel">
+
+              <input class="usuarios-search" type="search" placeholder="Buscar por nome..." id="search-usuarios"
+                oninput="filtrarUsuarios(this.value)" />
+
+              <div id="lista-usuarios">
+
+                <p class="group-label">Professores</p>
+
+                <div class="usuario-item" data-nome="Ana Silva">
+                  <div class="user-avatar" style="background:#2e7d52">AS</div>
+                  <div class="user-info">
+                    <strong>Ana Silva</strong>
+                    <span>ana.silva@escola.edu.br</span>
+                  </div>
+                  <span class="user-role professor">Professora</span>
+                </div>
+
+                <div class="usuario-item" data-nome="Carlos Lima">
+                  <div class="user-avatar" style="background:#388e5a">CL</div>
+                  <div class="user-info">
+                    <strong>Carlos Lima</strong>
+                    <span>carlos.lima@escola.edu.br</span>
+                  </div>
+                  <span class="user-role professor">Professor</span>
+                </div>
+
+                <div class="usuario-item" data-nome="Beatriz Nunes">
+                  <div class="user-avatar" style="background:#43a067">BN</div>
+                  <div class="user-info">
+                    <strong>Beatriz Nunes</strong>
+                    <span>beatriz.nunes@escola.edu.br</span>
+                  </div>
+                  <span class="user-role professor">Professora</span>
+                </div>
+
+                <p class="group-label">Alunos</p>
+
+                <div class="usuario-item" data-nome="Lucas Ferreira">
+                  <div class="user-avatar" style="background:#6aab8a">LF</div>
+                  <div class="user-info">
+                    <strong>Lucas Ferreira</strong>
+                    <span>lucas.ferreira@escola.edu.br</span>
+                  </div>
+                  <span class="user-role aluno">Aluno</span>
+                </div>
+
+                <div class="usuario-item" data-nome="Marina Costa">
+                  <div class="user-avatar" style="background:#8abea4">MC</div>
+                  <div class="user-info">
+                    <strong>Marina Costa</strong>
+                    <span>marina.costa@escola.edu.br</span>
+                  </div>
+                  <span class="user-role aluno">Aluno</span>
+                </div>
+
+                <div class="usuario-item" data-nome="Pedro Alves">
+                  <div class="user-avatar" style="background:#5d9e7a">PA</div>
+                  <div class="user-info">
+                    <strong>Pedro Alves</strong>
+                    <span>pedro.alves@escola.edu.br</span>
+                  </div>
+                  <span class="user-role aluno">Aluno</span>
+                </div>
+
+                <div class="usuario-item" data-nome="Julia Martins">
+                  <div class="user-avatar" style="background:#4e8d6b">JM</div>
+                  <div class="user-info">
+                    <strong>Julia Martins</strong>
+                    <span>julia.martins@escola.edu.br</span>
+                  </div>
+                  <span class="user-role aluno">Aluno</span>
+                </div>
+
+                <div class="usuario-item" data-nome="Rodrigo Santos">
+                  <div class="user-avatar" style="background:#79b598">RS</div>
+                  <div class="user-info">
+                    <strong>Rodrigo Santos</strong>
+                    <span>rodrigo.santos@escola.edu.br</span>
+                  </div>
+                  <span class="user-role aluno">Aluno</span>
+                </div>
+
+              </div>
+
+              <div class="empty-state" id="empty-usuarios" style="display:none">
+                Nenhum usuário encontrado.
+              </div>
+
+            </div>
+
+          </div>
         </section>
       </div>
 
