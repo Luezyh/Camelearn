@@ -8,11 +8,11 @@ const wrap = document.querySelector('.cl-wrap');
 const DIAS = [
   { label: 'Dom', chave: 'Domingo' },
   { label: 'Seg', chave: 'Segunda' },
-  { label: 'Ter', chave: 'Terça'   },
-  { label: 'Qua', chave: 'Quarta'  },
-  { label: 'Qui', chave: 'Quinta'  },
-  { label: 'Sex', chave: 'Sexta'   },
-  { label: 'Sáb', chave: 'Sábado'  },
+  { label: 'Ter', chave: 'Terça' },
+  { label: 'Qua', chave: 'Quarta' },
+  { label: 'Qui', chave: 'Quinta' },
+  { label: 'Sex', chave: 'Sexta' },
+  { label: 'Sáb', chave: 'Sábado' },
 ];
 const grid = document.getElementById('semana-grid');
 const overlay = document.getElementById('overlay');
@@ -21,13 +21,13 @@ const avatarDropdown = document.getElementById('avatarDropdown');
 const diasNomes = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
 const diasLongos = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
 const mesesCurtos = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
-const modal        = document.getElementById('modal-sessao');
-const btnAdd       = document.getElementById('btn-add');
-const btnFechar    = document.getElementById('modal-fechar');
-const btnCancelar  = document.getElementById('modal-cancelar');
+const modal = document.getElementById('modal-sessao');
+const btnAdd = document.getElementById('btn-add');
+const btnFechar = document.getElementById('modal-fechar');
+const btnCancelar = document.getElementById('modal-cancelar');
 const btnConfirmar = document.getElementById('modal-confirmar');
 const inputMateria = document.getElementById('modal-materia');
-const selectDia    = document.getElementById('modal-dia');
+const selectDia = document.getElementById('modal-dia');
 
 DIAS.forEach(({ label, chave }) => {
   const opt = document.createElement('option');
@@ -35,22 +35,31 @@ DIAS.forEach(({ label, chave }) => {
   opt.textContent = label;
   selectDia.appendChild(opt);
 });
- 
-function abrirModal()  { modal.classList.add('open'); }
+
+function abrirModal() { modal.classList.add('open'); }
 function fecharModal() {
   modal.classList.remove('open');
   inputMateria.value = '';
-  inputNome.value    = '';
+  inputNome.value = '';
 }
- 
+
 btnAdd.addEventListener('click', abrirModal);
 btnFechar.addEventListener('click', fecharModal);
 btnCancelar.addEventListener('click', fecharModal);
 modal.addEventListener('click', (e) => { if (e.target === modal) fecharModal(); });
- 
+
+(function () {
+  const MONTHS = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+  const now = new Date();
+  const dayEl = document.getElementById('js-day');
+  const monEl = document.getElementById('js-month');
+  if (dayEl) dayEl.textContent = now.getDate();
+  if (monEl) monEl.textContent = MONTHS[now.getMonth()];
+})();
+
 btnConfirmar.addEventListener('click', async () => {
   const materia = inputMateria.value.trim();
-  const dia     = selectDia.value;
+  const dia = selectDia.value;
   if (!materia) return;
   await CriarSessao(materia, dia);
   fecharModal();
@@ -194,19 +203,19 @@ function RenderizarAgenda() {
 function RenderizarCronograma(sessoes) {
   const grid = document.getElementById('semana-grid');
   grid.innerHTML = '';
- 
+
   DIAS.forEach(({ label, chave }) => {
     const col = document.createElement('div');
     col.className = 'dia-col';
- 
+
     const header = document.createElement('div');
     header.className = 'dia-col-header';
     header.textContent = label;
- 
+
     const body = document.createElement('div');
     body.className = 'dia-col-body';
     body.dataset.dia = chave;
- 
+
     // drag-over na coluna
     body.addEventListener('dragover', (e) => {
       e.preventDefault();
@@ -216,19 +225,19 @@ function RenderizarCronograma(sessoes) {
     body.addEventListener('drop', (e) => {
       e.preventDefault();
       body.classList.remove('drag-over');
-      const id   = e.dataTransfer.getData('sessao-id');
+      const id = e.dataTransfer.getData('sessao-id');
       const card = document.querySelector(`.sessao[data-id="${id}"]`);
       if (card) {
         body.appendChild(card);
         atualizarDiaSessao(id, chave);
       }
     });
- 
+
     // sessões do dia
     sessoes.filter(s => s.dia === chave).forEach(s => {
       body.appendChild(criarCard(s));
     });
- 
+
     col.appendChild(header);
     col.appendChild(body);
     grid.appendChild(col);
@@ -240,25 +249,25 @@ function criarCard(s) {
   card.className = 'sessao';
   card.dataset.id = s.id;
   card.draggable = true;
- 
+
   card.innerHTML = `
     <div class="sessao-info">
       <p class="sessao-materia">${s.materia}</p>
     </div>
     <button class="sessao-delete" title="Remover sessão">x</button>
   `;
- 
+
   card.addEventListener('dragstart', (e) => {
     e.dataTransfer.setData('sessao-id', s.id);
     card.classList.add('dragging');
   });
   card.addEventListener('dragend', () => card.classList.remove('dragging'));
- 
+
   card.querySelector('.sessao-delete').addEventListener('click', (e) => {
     e.stopPropagation();
     deletarSessao(s.id, card);
   });
- 
+
   return card;
 }
 
@@ -272,7 +281,7 @@ async function CriarSessao(materia, dia) {
     });
     if (!res.ok) { console.error(await res.text()); return; }
     const nova = await res.json();
- 
+
     // adiciona o card na coluna correta sem re-renderizar tudo
     const col = document.querySelector(`.dia-col-body[data-dia="${dia}"]`);
     if (col) col.appendChild(criarCard(nova));
