@@ -62,26 +62,6 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') closeAllDropdowns();
 });
 
-function filtrarTurmas(query) {
-  const cards = document.querySelectorAll('.turma-card');
-  const empty = document.getElementById('empty-turmas');
-  const q     = query.toLowerCase().trim();
-  let visivel = 0;
-
-  cards.forEach(card => {
-    const nome = card.dataset.nome.toLowerCase();
-    const show = !q || nome.includes(q);
-    card.style.display = show ? '' : 'none';
-    if (show) visivel++;
-  });
-
-  empty.style.display = visivel === 0 ? 'flex' : 'none';
-}
-
-function abrirTurma(id) {
-
-}
-
 tabs.forEach(btn => {
   btn.addEventListener('click', () => {
     tabs.forEach(t => {
@@ -96,55 +76,131 @@ tabs.forEach(btn => {
   });
 });
 
-function filtrarUsuarios(query) {
-  const items = document.querySelectorAll('.usuario-item');
-  const empty = document.getElementById('empty-usuarios');
-  const q = query.toLowerCase().trim();
-  let visivel = 0;
-
-  items.forEach(item => {
-    const show = !q || item.dataset.nome.toLowerCase().includes(q);
-    item.style.display = show ? '' : 'none';
-    if (show) visivel++;
-  });
-
-  // Esconde labels de grupo se não houver itens visíveis abaixo
-  document.querySelectorAll('.group-label').forEach(label => {
-    let next = label.nextElementSibling;
-    let temVisivel = false;
-    while (next && !next.classList.contains('group-label')) {
-      if (next.classList.contains('usuario-item') && next.style.display !== 'none') {
-        temVisivel = true;
-      }
-      next = next.nextElementSibling;
-    }
-    label.style.display = temVisivel ? '' : 'none';
-  });
-
-  empty.style.display = visivel === 0 ? 'flex' : 'none';
-}
-
 function MudarSecao(secao) {
   const secoes = document.querySelectorAll('section');
-  secoes.forEach(s => s.style.display = 'none');
-  document.getElementById(secao).style.display = 'flex';
-}
+  secoes.forEach(s => s.classList.remove('show'));
+  document.getElementById(secao).classList.add('show');
 
-async function CarregarTurma(id) {
-  const response = await fetch(`/turmas/${id}`);
-
-  if (response.ok) {
-    const turma = await response.json();
-    const turmaSection = document.getElementById('turma-selecionada');
-    turmaSection.innerHTML = `
-    <h2>${turma.nome}</h2>
-    <p>${turma.descricao}</p>
-    `;
-    MudarSecao('turma-selecionada');
-  }
+  if (secao === 'turma-section') carregarTarefasTurma();
 }
 
 async function EncerrarSessao() {
   await fetch('/logout', { method: 'POST', credentials: 'include' });
   window.location.href = '/login';
+}
+
+// ===== TURMA SECTION =====
+const modalOverlay = document.getElementById('modalOverlay');
+const btnAbrirModalTarefa = document.getElementById('btnAbrirModalTarefa');
+const btnFecharModal = document.getElementById('btnFecharModal');
+const btnCancelar = document.getElementById('btnCancelar');
+const btnSalvarTarefa = document.getElementById('btnSalvarTarefa');
+const listaTarefas = document.getElementById('listaTarefas');
+const tarefaFeedback = document.getElementById('tarefaFeedback');
+
+function abrirModal() {
+  modalOverlay.classList.add('open');
+  document.getElementById('tarefaTitulo').value = '';
+  document.getElementById('tarefaDescricao').value = '';
+  document.getElementById('tarefaTipo').value = '';
+  document.getElementById('tarefaData').value = '';
+  tarefaFeedback.textContent = '';
+  tarefaFeedback.className = 'ts-feedback';
+}
+
+function fecharModal() {
+  modalOverlay.classList.remove('open');
+}
+
+btnAbrirModalTarefa.addEventListener('click', abrirModal);
+btnFecharModal.addEventListener('click', fecharModal);
+btnCancelar.addEventListener('click', fecharModal);
+
+modalOverlay.addEventListener('click', (e) => {
+  if (e.target === modalOverlay) fecharModal();
+});
+
+function adicionarTarefaNaLista(titulo, descricao, data, tipo) {
+  const vazia = listaTarefas.querySelector('.ts-tarefa-vazia');
+  if (vazia) vazia.remove();
+
+  const tipoLabel = { atividade: 'Atividade', trabalho: 'Trabalho', prova: 'Prova' };
+
+  const li = document.createElement('li');
+  li.className = 'ts-tarefa-item';
+  li.innerHTML = `
+    <span class="ts-tarefa-titulo">${titulo}</span>
+    ${descricao ? `<span class="ts-tarefa-desc">${descricao}</span>` : ''}
+    <div class="ts-tarefa-meta">
+      ${tipo ? `<span class="ts-tarefa-tipo ts-tipo-${tipo}">${tipoLabel[tipo]}</span>` : ''}
+      ${data ? `<span class="ts-tarefa-data">Entrega: ${data}</span>` : ''}
+    </div>
+  `;
+  listaTarefas.appendChild(li);
+}
+
+btnSalvarTarefa.addEventListener('click', async () => {
+  const titulo = document.getElementById('tarefaTitulo').value.trim();
+  const descricao = document.getElementById('tarefaDescricao').value.trim();
+  const tipo = document.getElementById('tarefaTipo').value;
+  const data = document.getElementById('tarefaData').value;
+
+  if (!titulo) {
+    tarefaFeedback.textContent = 'O título é obrigatório.';
+    tarefaFeedback.className = 'ts-feedback erro';
+    return;
+  }
+
+  if (!tipo) {
+    tarefaFeedback.textContent = 'Selecione o tipo da tarefa.';
+    tarefaFeedback.className = 'ts-feedback erro';
+    return;
+  }
+
+  btnSalvarTarefa.disabled = true;
+  btnSalvarTarefa.textContent = 'Salvando...';
+
+  try {
+    const res = await fetch('/criar_tarefa', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ titulo, descricao, data_fim: data, tipo })
+    });
+
+    if (!res.ok) throw new Error(await res.text());
+
+    tarefaFeedback.textContent = 'Tarefa criada com sucesso!';
+    tarefaFeedback.className = 'ts-feedback sucesso';
+    adicionarTarefaNaLista(titulo, descricao, data, tipo);
+
+    setTimeout(fecharModal, 1200);
+  } catch (err) {
+    tarefaFeedback.textContent = err.message || 'Erro ao criar tarefa.';
+    tarefaFeedback.className = 'ts-feedback erro';
+  } finally {
+    btnSalvarTarefa.disabled = false;
+    btnSalvarTarefa.textContent = 'Salvar Tarefa';
+  }
+});
+
+async function carregarTarefasTurma() {
+  try {
+    const res = await fetch('/tarefas_turma/1', { credentials: 'include' });
+    if (!res.ok) throw new Error(await res.text());
+    const tarefas = await res.json();
+
+    listaTarefas.innerHTML = '';
+
+    if (tarefas.length === 0) {
+      listaTarefas.innerHTML = '<li class="ts-tarefa-vazia">Nenhuma tarefa criada ainda.</li>';
+      return;
+    }
+
+    tarefas.forEach(t => {
+      adicionarTarefaNaLista(t.titulo, t.descricao, t.data_fim, t.tipo);
+    });
+  } catch (err) {
+    listaTarefas.innerHTML = '<li class="ts-tarefa-vazia">Erro ao carregar tarefas.</li>';
+  }
 }

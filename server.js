@@ -148,7 +148,7 @@ app.get('/tarefas', async (req, res) => {
         .from('tarefas')
         .select('*')
         .eq('usuario_id', usuario.id)
-        .order('data_inicio', { ascending: true })
+        .order('data_fim', { ascending: true })
     if (error) return res.status(500).send(error.message);
     res.json(tarefas);
 });
@@ -213,12 +213,24 @@ app.patch('/sessoes/:id', async (req, res) => {
 app.post('/criar_tarefa', async (req, res) => {
     const usuario = obterUsuario(req);
     if (usuario.tipo !== 'professor') return res.status(401).send('Não autorizado.');
-    const { titulo, descricao, data } = req.body;
+    const { titulo, descricao, tipo, data_fim } = req.body;
     const { error } = await supabase
         .from('tarefas')
-        .insert({ usuario_id: usuario.id, titulo, descricao, data });
+        .insert({ usuario_id: usuario.id, turma_id: 1, titulo, descricao, data_fim, tipo })
     if (error) return res.status(500).send(error.message);
     res.send('Tarefa criada!');
+});
+
+app.get('/tarefas_turma/:turma_id', async (req, res) => {
+  const usuario = obterUsuario(req);
+  if (!usuario) return res.status(401).send('Não autorizado.');
+  const { data: tarefas, error } = await supabase
+    .from('tarefas')
+    .select('*')
+    .eq('turma_id', req.params.turma_id)
+    .order('data_fim', { ascending: true });
+  if (error) return res.status(500).send(error.message);
+  res.json(tarefas);
 });
 
 app.post('/logout', (req, res) => {

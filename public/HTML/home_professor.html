@@ -13,7 +13,6 @@
     rel="stylesheet">
   <link rel="stylesheet" href="../CSS/home_professor.css">
   <link rel="stylesheet" href="../CSS/turma_section.css">
-  <link rel="stylesheet" href="../CSS/turmas_section.css">
 </head>
 
 <body>
@@ -31,7 +30,7 @@
         <button class="cl-nav-item" onclick="MudarSecao('inicio')">
           <img src="../assets/inicio.png"><span>Início</span>
         </button>
-        <button class="cl-nav-item" onclick="MudarSecao('turmas-section')">
+        <button class="cl-nav-item" onclick="MudarSecao('turma-section')">
           <img src=""><span>Turmas</span>
         </button>
       </nav>
@@ -59,13 +58,13 @@
                 </div>
               </div>
               <ul class="cl-profile-menu">
-                <li><a href="perfil.html" class="cl-profile-item"><i class="ti ti-user-circle"></i><span>Meu
+                <li><a href="" class="cl-profile-item"><i class="ti ti-user-circle"></i><span>Meu
                       perfil</span></a></li>
-                <li><a href="configuracoes.html" class="cl-profile-item"><i
+                <li><a href="" class="cl-profile-item"><i
                       class="ti ti-settings"></i><span>Configurações</span></a></li>
               </ul>
               <div class="cl-profile-footer">
-                <a href="login.html" class="cl-profile-logout"><i class="ti ti-logout"></i><span>Sair da
+                <a href="../HTML/login.html" class="cl-profile-logout"><i class="ti ti-logout"></i><span>Sair da
                     conta</span></a>
               </div>
             </div>
@@ -75,286 +74,121 @@
       </header>
 
       <div class="cl-body">
-        <section class="inicio" id="inicio">
+        <section class="inicio show" id="inicio">
           <h1>Bem-vindo, Professor!</h1>
         </section>
 
-        <section class="turmas-section" id="turmas-section">
-
-          <div class="turmas-header">
-            <div>
-              <h1>Turmas</h1>
-              <span>Selecione uma turma para acessar</span>
-            </div>
-            <input class="turmas-search" type="search" placeholder="Buscar turma..." id="search-turmas"
-              oninput="filtrarTurmas(this.value)" />
-          </div>
-
-          <div class="turmas-grid" id="turmas-grid">
-
-            <div class="turma-card" data-nome="9º Ano A" onclick="abrirTurma(id)">
-              <div class="turma-card-top" style="background: #2e7d52;">
-                <span class="turma-sigla">9ºA</span>
-                <span class="turma-nome">9º Ano A</span>
-              </div>
-            </div>
-
-            <div class="turma-card" data-nome="9º Ano A" onclick="abrirTurma(id)">
-              <div class="turma-card-top" style="background: #2e7d52;">
-                <span class="turma-sigla">9ºA</span>
-                <span class="turma-nome">9º Ano A</span>
-              </div>
-            </div>
-
-            <div class="turma-card" data-nome="9º Ano A" onclick="abrirTurma(id)">
-              <div class="turma-card-top" style="background: #2e7d52;">
-                <span class="turma-sigla">9ºA</span>
-                <span class="turma-nome">9º Ano A</span>
-              </div>
-            </div>
-
-            <div class="turma-card" data-nome="9º Ano A" onclick="abrirTurma(id)">
-              <div class="turma-card-top" style="background: #2e7d52;">
-                <span class="turma-sigla">9ºA</span>
-                <span class="turma-nome">9º Ano A</span>
-              </div>
-            </div>
-
-            <div class="turma-card" data-nome="9º Ano A" onclick="abrirTurma(id)">
-              <div class="turma-card-top" style="background: #2e7d52;">
-                <span class="turma-sigla">9ºA</span>
-                <span class="turma-nome">9º Ano A</span>
-              </div>
-            </div>
-
-            <div class="turma-card" data-nome="9º Ano A" onclick="abrirTurma(id)">
-              <div class="turma-card-top" style="background: #2e7d52;">
-                <span class="turma-sigla">9ºA</span>
-                <span class="turma-nome">9º Ano A</span>
-              </div>
-            </div>
-
-          </div>
-
-          <div class="empty-state" id="empty-turmas" style="display:none">
-            Nenhuma turma encontrada.
-          </div>
-
-        </section>
-
         <section class="turma-section" id="turma-section">
-          <!-- Cabeçalho -->
-          <div class="turma-header">
-            <div class="turma-header-top">
-              <div class="turma-avatar">9ºA</div>
-              <div class="turma-meta">
-                <h2>9º Ano A — Ensino Fundamental</h2>
-                <span>Colégio Caminhos e Colinas · 2026</span>
-              </div>
-            </div>
 
-            <!-- Abas -->
-            <nav class="tab-bar" role="tablist">
-              <button class="tab-btn active" role="tab" data-tab="mural" aria-selected="true">Mural</button>
-              <button class="tab-btn" role="tab" data-tab="tarefas" aria-selected="false">Tarefas</button>
-              <button class="tab-btn" role="tab" data-tab="usuarios" aria-selected="false">Usuários</button>
-            </nav>
+          <div class="ts-header">
+            <div class="ts-header-info">
+              <span class="ts-badge">Turma</span>
+              <h2 class="ts-title">3º Ano B — Ensino Médio</h2>
+              <p class="ts-subtitle">12 alunos matriculados</p>
+            </div>
+            <button class="ts-btn-add" id="btnAbrirModalTarefa">
+              <i class="ti ti-plus"></i> Nova Tarefa
+            </button>
           </div>
 
-          <!-- Painéis -->
-          <div class="tab-content">
+          <div class="ts-body">
 
-            <!-- MURAL -->
-            <div class="tab-panel active" id="panel-mural" role="tabpanel">
-
-              <div class="card">
-                <div class="card-head">
-                  <span class="tag tag-aviso">Aviso</span>
-                  <span class="card-autor">Prof.ª Ana Silva</span>
-                </div>
-                <h3>Reunião de pais e mestres</h3>
-                <p>A reunião acontecerá na próxima sexta-feira, dia 30/05, às 18h no auditório principal. Presença
-                  obrigatória.</p>
-                <span class="card-date">23/05/2026</span>
+            <!-- Lista de alunos -->
+            <div class="ts-card ts-alunos-card">
+              <div class="ts-card-header">
+                <i class="ti ti-users"></i>
+                <span>Alunos</span>
               </div>
-
-              <div class="card">
-                <div class="card-head">
-                  <span class="tag tag-tarefa">Tarefa</span>
-                  <span class="card-autor">Prof. Carlos Lima</span>
-                </div>
-                <h3>Redação — A tecnologia e o futuro</h3>
-                <p>Entregar a redação de no mínimo 30 linhas até segunda-feira.</p>
-                <span class="card-date">22/05/2026 · 14:30</span>
-              </div>
-
-              <div class="card">
-                <div class="card-head">
-                  <span class="tag tag-aviso">Aviso</span>
-                  <span class="card-autor">Prof.ª Ana Silva</span>
-                </div>
-                <h3>Alteração de horário — Matemática</h3>
-                <p>A aula de quinta-feira será adiantada para as 7h20 devido ao conselho de classe.</p>
-                <span class="card-date">21/05/2026 · 11:00</span>
-              </div>
-
-              <div class="card">
-                <div class="card-head">
-                  <span class="tag tag-tarefa">Tarefa</span>
-                  <span class="card-autor">Prof.ª Beatriz Nunes</span>
-                </div>
-                <h3>Lista de exercícios — Funções</h3>
-                <p>Completar os exercícios 1 a 15 do capítulo 7 do livro didático. Prazo: 27/05.</p>
-                <span class="card-date">20/05/2026 · 08:45</span>
-              </div>
-
-              <div class="card">
-                <div class="card-head">
-                  <span class="tag tag-aviso">Aviso</span>
-                  <span class="card-autor">Coordenação</span>
-                </div>
-                <h3>Mostra Cultural 2026</h3>
-                <p>Inscrições abertas. Grupos de até 5 alunos. Prazo: 01/06.</p>
-                <span class="card-date">19/05/2026 · 16:00</span>
-              </div>
-
+              <ul class="ts-alunos-list">
+                <li class="ts-aluno-item">
+                  <div class="ts-aluno-avatar">A</div><span>Ana Lima</span>
+                </li>
+                <li class="ts-aluno-item">
+                  <div class="ts-aluno-avatar">B</div><span>Bruno Souza</span>
+                </li>
+                <li class="ts-aluno-item">
+                  <div class="ts-aluno-avatar">C</div><span>Carla Mendes</span>
+                </li>
+                <li class="ts-aluno-item">
+                  <div class="ts-aluno-avatar">D</div><span>Diego Ferreira</span>
+                </li>
+                <li class="ts-aluno-item">
+                  <div class="ts-aluno-avatar">E</div><span>Eduarda Costa</span>
+                </li>
+                <li class="ts-aluno-item">
+                  <div class="ts-aluno-avatar">F</div><span>Felipe Rocha</span>
+                </li>
+                <li class="ts-aluno-item">
+                  <div class="ts-aluno-avatar">G</div><span>Gabriela Nunes</span>
+                </li>
+                <li class="ts-aluno-item">
+                  <div class="ts-aluno-avatar">H</div><span>Henrique Alves</span>
+                </li>
+                <li class="ts-aluno-item">
+                  <div class="ts-aluno-avatar">I</div><span>Isabela Martins</span>
+                </li>
+                <li class="ts-aluno-item">
+                  <div class="ts-aluno-avatar">J</div><span>João Pedro Silva</span>
+                </li>
+                <li class="ts-aluno-item">
+                  <div class="ts-aluno-avatar">K</div><span>Kamila Borges</span>
+                </li>
+                <li class="ts-aluno-item">
+                  <div class="ts-aluno-avatar">L</div><span>Lucas Andrade</span>
+                </li>
+              </ul>
             </div>
 
-            <!-- TAREFAS -->
-            <div class="tab-panel" id="panel-tarefas" role="tabpanel">
-
-              <div class="card tarefa-card" onclick="toggleTarefa(this)">
-                <div class="tarefa-head">
-                  <div class="tarefa-info">
-                    <h3>Redação — A tecnologia e o futuro</h3>
-                    <p>Mínimo 30 linhas. Salvar em PDF e enviar pelo sistema.</p>
-                    <div class="tarefa-meta">
-                      <span class="materia">Português</span>
-                    </div>
-                  </div>
-                </div>
+            <!-- Tarefas criadas -->
+            <div class="ts-card ts-tarefas-card">
+              <div class="ts-card-header">
+                <i class="ti ti-clipboard-list"></i>
+                <span>Tarefas da Turma</span>
               </div>
-
-              <div class="card tarefa-card">
-                <div class="tarefa-head">
-                  <div class="tarefa-info">
-                    <h3>Lista de exercícios — Funções</h3>
-                    <p>Exercícios 1 a 15 do capítulo 7.</p>
-                    <div class="tarefa-meta">
-                      <span class="materia">Matemática</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="card tarefa-card">
-                <div class="tarefa-head">
-                  <div class="tarefa-info">
-                    <h3>Pesquisa — Biomas brasileiros</h3>
-                    <p>Apresentação em grupo, mínimo 10 slides.</p>
-                    <div class="tarefa-meta">
-                      <span class="materia">Ciências</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-
-            <!-- USUÁRIOS -->
-            <div class="tab-panel" id="panel-usuarios" role="tabpanel">
-
-              <input class="usuarios-search" type="search" placeholder="Buscar por nome..." id="search-usuarios"
-                oninput="filtrarUsuarios(this.value)" />
-
-              <div id="lista-usuarios">
-
-                <p class="group-label">Professores</p>
-
-                <div class="usuario-item" data-nome="Ana Silva">
-                  <div class="user-avatar" style="background:#2e7d52">AS</div>
-                  <div class="user-info">
-                    <strong>Ana Silva</strong>
-                    <span>ana.silva@escola.edu.br</span>
-                  </div>
-                  <span class="user-role professor">Professora</span>
-                </div>
-
-                <div class="usuario-item" data-nome="Carlos Lima">
-                  <div class="user-avatar" style="background:#388e5a">CL</div>
-                  <div class="user-info">
-                    <strong>Carlos Lima</strong>
-                    <span>carlos.lima@escola.edu.br</span>
-                  </div>
-                  <span class="user-role professor">Professor</span>
-                </div>
-
-                <div class="usuario-item" data-nome="Beatriz Nunes">
-                  <div class="user-avatar" style="background:#43a067">BN</div>
-                  <div class="user-info">
-                    <strong>Beatriz Nunes</strong>
-                    <span>beatriz.nunes@escola.edu.br</span>
-                  </div>
-                  <span class="user-role professor">Professora</span>
-                </div>
-
-                <p class="group-label">Alunos</p>
-
-                <div class="usuario-item" data-nome="Lucas Ferreira">
-                  <div class="user-avatar" style="background:#6aab8a">LF</div>
-                  <div class="user-info">
-                    <strong>Lucas Ferreira</strong>
-                    <span>lucas.ferreira@escola.edu.br</span>
-                  </div>
-                  <span class="user-role aluno">Aluno</span>
-                </div>
-
-                <div class="usuario-item" data-nome="Marina Costa">
-                  <div class="user-avatar" style="background:#8abea4">MC</div>
-                  <div class="user-info">
-                    <strong>Marina Costa</strong>
-                    <span>marina.costa@escola.edu.br</span>
-                  </div>
-                  <span class="user-role aluno">Aluno</span>
-                </div>
-
-                <div class="usuario-item" data-nome="Pedro Alves">
-                  <div class="user-avatar" style="background:#5d9e7a">PA</div>
-                  <div class="user-info">
-                    <strong>Pedro Alves</strong>
-                    <span>pedro.alves@escola.edu.br</span>
-                  </div>
-                  <span class="user-role aluno">Aluno</span>
-                </div>
-
-                <div class="usuario-item" data-nome="Julia Martins">
-                  <div class="user-avatar" style="background:#4e8d6b">JM</div>
-                  <div class="user-info">
-                    <strong>Julia Martins</strong>
-                    <span>julia.martins@escola.edu.br</span>
-                  </div>
-                  <span class="user-role aluno">Aluno</span>
-                </div>
-
-                <div class="usuario-item" data-nome="Rodrigo Santos">
-                  <div class="user-avatar" style="background:#79b598">RS</div>
-                  <div class="user-info">
-                    <strong>Rodrigo Santos</strong>
-                    <span>rodrigo.santos@escola.edu.br</span>
-                  </div>
-                  <span class="user-role aluno">Aluno</span>
-                </div>
-
-              </div>
-
-              <div class="empty-state" id="empty-usuarios" style="display:none">
-                Nenhum usuário encontrado.
-              </div>
-
+              <ul class="ts-tarefas-list" id="listaTarefas">
+                <li class="ts-tarefa-vazia">Nenhuma tarefa criada ainda.</li>
+              </ul>
             </div>
 
           </div>
+
+          <!-- MODAL Nova Tarefa -->
+          <div class="ts-modal-overlay" id="modalOverlay">
+            <div class="ts-modal">
+              <div class="ts-modal-header">
+                <h3>Nova Tarefa</h3>
+                <button class="ts-modal-close" id="btnFecharModal"><i class="ti ti-x"></i></button>
+              </div>
+              <div class="ts-modal-body">
+                <label class="ts-label" for="tarefaTitulo">Título</label>
+                <input class="ts-input" id="tarefaTitulo" type="text" placeholder="Ex: Exercícios de Matemática">
+
+                <label class="ts-label" for="tarefaDescricao">Descrição</label>
+                <textarea class="ts-input ts-textarea" id="tarefaDescricao"
+                  placeholder="Descreva a tarefa..."></textarea>
+
+                <label class="ts-label" for="tarefaTipo">Tipo</label>
+                <select class="ts-input ts-select" id="tarefaTipo">
+                  <option value="" disabled selected>Selecione o tipo</option>
+                  <option value="atividade">Atividade</option>
+                  <option value="trabalho">Trabalho</option>
+                  <option value="prova">Prova</option>
+                </select>
+
+                <label class="ts-label" for="tarefaData">Data de entrega</label>
+                <input class="ts-input" id="tarefaData" type="date">
+
+                <p class="ts-feedback" id="tarefaFeedback"></p>
+              </div>
+              <div class="ts-modal-footer">
+                <button class="ts-btn-cancel" id="btnCancelar">Cancelar</button>
+                <button class="ts-btn-salvar" id="btnSalvarTarefa">Salvar Tarefa</button>
+              </div>
+            </div>
+          </div>
+
         </section>
+
       </div>
 
     </div>

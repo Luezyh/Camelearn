@@ -1,414 +1,400 @@
-/* ── Reset ─────────────────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-/* ── Variáveis ─────────────────────────────────────────── */
-:root {
-  --green:        #2e7d52;
-  --green-mid:    #4caf7d;
-  --green-soft:   #eef6f1;
-  --green-border: #c8e0d3;
-  --text-dark:    #1a2e24;
-  --text-mid:     #52705f;
-  --text-light:   #96b3a4;
-  --bg:           #ffffff;
-  --bg-header:    #f9fcfa;
-  --radius:       8px;
-  --ease:         .2s ease;
-}
-
-/* ── Demo wrapper ──────────────────────────────────────── */
-body {
-  font-family: 'Segoe UI', system-ui, sans-serif;
-  background: #edf2ee;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-}
-
-.demo-card {
-  width: 800px;
-  height: 580px;
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 4px 24px rgba(0,0,0,.09);
-}
-
-/* ── Section ───────────────────────────────────────────── */
+/* ===== TURMA SECTION ===== */
 .turma-section {
-  width: 100%;
-  height: 100%;
-  background: var(--bg);
+  padding: 28px 32px;
+  overflow-y: auto;
+  gap: 24px;
+}
+
+.ts-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.ts-header-info {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  gap: 4px;
 }
 
-/* ── Cabeçalho ─────────────────────────────────────────── */
-.turma-header {
-  background: var(--bg-header);
-  border-bottom: 1px solid var(--green-border);
-  padding: 18px 22px 0;
-  flex-shrink: 0;
-}
-
-.turma-header-top {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
-.turma-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius);
-  background: var(--green);
-  color: #fff;
-  font-size: .75rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  letter-spacing: .02em;
-}
-
-.turma-meta h2 {
-  font-size: .92rem;
-  font-weight: 600;
-  color: var(--text-dark);
-  line-height: 1.3;
-}
-
-.turma-meta span {
-  font-size: .75rem;
-  color: var(--text-light);
-}
-
-/* ── Tab bar ───────────────────────────────────────────── */
-.tab-bar {
-  display: flex;
-  gap: 2px;
-}
-
-.tab-btn {
-  padding: 9px 16px;
-  font-size: .82rem;
-  font-weight: 500;
-  font-family: inherit;
-  color: var(--text-light);
-  background: none;
-  border: none;
-  cursor: pointer;
-  position: relative;
-  transition: color var(--ease);
-}
-
-.tab-btn::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 2px;
-  background: var(--green);
-  border-radius: 2px 2px 0 0;
-  transform: scaleX(0);
-  transition: transform var(--ease);
-}
-
-.tab-btn:hover { color: var(--text-mid); }
-
-.tab-btn.active {
+.ts-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
   color: var(--green);
+  background: var(--green-lighter);
+  border: 1px solid var(--green-border);
+  border-radius: 6px;
+  padding: 2px 8px;
+  width: fit-content;
 }
 
-.tab-btn.active::after {
-  transform: scaleX(1);
+.ts-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0;
 }
 
-/* ── Conteúdo ──────────────────────────────────────────── */
-.tab-content {
-  flex: 1;
-  position: relative;
+.ts-subtitle {
+  font-size: 0.8rem;
+  color: var(--color-text-tertiary);
+}
+
+.ts-btn-add {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  background: var(--green-light);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+.ts-btn-add:hover {
+  background: var(--green);
+}
+
+.ts-body {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+/* Cards */
+.ts-card {
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: 14px;
   overflow: hidden;
 }
 
-.tab-panel {
-  position: absolute;
-  inset: 0;
-  padding: 18px 22px;
-  overflow-y: auto;
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(6px);
-  transition: opacity var(--ease), transform var(--ease);
-}
-
-.tab-panel.active {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateY(0);
-}
-
-.tab-panel::-webkit-scrollbar { width: 4px; }
-.tab-panel::-webkit-scrollbar-track { background: transparent; }
-.tab-panel::-webkit-scrollbar-thumb {
-  background: var(--green-border);
-  border-radius: 4px;
-}
-
-/* ── Cartão genérico ───────────────────────────────────── */
-.card {
-  border: 1px solid var(--green-border);
-  border-radius: var(--radius);
-  padding: 14px 16px;
-  margin-bottom: 10px;
-  transition: box-shadow var(--ease);
-}
-
-.card:hover {
-  box-shadow: 0 2px 12px rgba(46,125,82,.08);
-}
-
-/* ── Mural ─────────────────────────────────────────────── */
-.card-head {
+.ts-card-header {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 8px;
+  padding: 14px 18px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  border-bottom: 0.5px solid var(--color-border-tertiary);
+  background: var(--color-background-secondary);
 }
 
-.tag {
-  font-size: .68rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: .05em;
-  padding: 2px 8px;
-  border-radius: 20px;
-}
-
-.tag-aviso {
-  background: var(--green-soft);
+.ts-card-header i {
+  font-size: 17px;
   color: var(--green);
-  border: 1px solid var(--green-border);
 }
 
-.tag-tarefa {
-  background: #fffbeb;
-  color: #92600a;
-  border: 1px solid #f0d89a;
+/* Lista de alunos */
+.ts-alunos-list {
+  list-style: none;
+  padding: 8px 0;
+  max-height: 420px;
+  overflow-y: auto;
 }
 
-.card-autor {
-  font-size: .75rem;
-  color: var(--text-light);
-  margin-left: auto;
-}
-
-.card h3 {
-  font-size: .87rem;
-  font-weight: 600;
-  color: var(--text-dark);
-  margin-bottom: 4px;
-}
-
-.card p {
-  font-size: .8rem;
-  color: var(--text-mid);
-  line-height: 1.55;
-  margin-bottom: 8px;
-}
-
-.card-date {
-  font-size: .7rem;
-  color: var(--text-light);
-}
-
-/* ── Tarefas ───────────────────────────────────────────── */
-.tarefa-card { cursor: pointer; }
-
-.tarefa-head {
+.ts-aluno-item {
   display: flex;
-  gap: 12px;
-  align-items: flex-start;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 18px;
+  transition: background var(--transition);
+  cursor: default;
 }
 
-.tarefa-checkbox {
-  width: 17px;
-  height: 17px;
-  border: 2px solid var(--green-border);
-  border-radius: 4px;
-  flex-shrink: 0;
-  margin-top: 2px;
+.ts-aluno-item:hover {
+  background: var(--color-background-secondary);
+}
+
+.ts-aluno-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--green-lighter);
+  border: 1px solid var(--green-border);
+  color: var(--green);
+  font-size: 0.75rem;
+  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background var(--ease), border-color var(--ease);
+  flex-shrink: 0;
 }
 
-.tarefa-checkbox.done {
-  background: var(--green);
+.ts-aluno-item span {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+/* Lista de tarefas */
+.ts-tarefas-list {
+  list-style: none;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 420px;
+  overflow-y: auto;
+  min-height: 80px;
+}
+
+.ts-tarefa-vazia {
+  font-size: 0.8rem;
+  color: var(--color-text-tertiary);
+  padding: 12px 6px;
+  text-align: center;
+}
+
+.ts-tarefa-item {
+  background: var(--color-background-secondary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: 10px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ts-tarefa-titulo {
+  font-size: 0.83rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.ts-tarefa-desc {
+  font-size: 0.76rem;
+  color: var(--color-text-secondary);
+}
+
+.ts-tarefa-data {
+  font-size: 0.7rem;
+  color: var(--color-text-tertiary);
+  margin-top: 2px;
+}
+
+/* ===== MODAL ===== */
+.ts-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.ts-modal-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.ts-modal {
+  background: var(--color-background-primary);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  transform: translateY(12px) scale(0.97);
+  transition: transform 0.2s ease;
+  overflow: hidden;
+}
+
+.ts-modal-overlay.open .ts-modal {
+  transform: translateY(0) scale(1);
+}
+
+.ts-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 0.5px solid var(--color-border-tertiary);
+}
+
+.ts-modal-header h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.ts-modal-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-tertiary);
+  font-size: 19px;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  transition: color var(--transition);
+}
+
+.ts-modal-close:hover {
+  color: var(--color-text-primary);
+}
+
+.ts-modal-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ts-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  margin-bottom: -6px;
+}
+
+.ts-input {
+  width: 100%;
+  padding: 9px 13px;
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: 9px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.82rem;
+  color: var(--color-text-primary);
+  background: var(--color-background-secondary);
+  outline: none;
+  transition: border-color var(--transition);
+}
+
+.ts-input:focus {
   border-color: var(--green);
 }
 
-.tarefa-checkbox.done::after {
-  content: '';
-  width: 4px;
-  height: 8px;
-  border: 2px solid #fff;
-  border-top: none;
-  border-left: none;
-  transform: rotate(42deg) translateY(-1px);
+.ts-textarea {
+  resize: vertical;
+  min-height: 80px;
 }
 
-.tarefa-info { flex: 1; }
-
-.tarefa-info h3 {
-  font-size: .87rem;
+.ts-feedback {
+  font-size: 0.76rem;
   font-weight: 600;
-  color: var(--text-dark);
-  margin-bottom: 3px;
+  min-height: 18px;
 }
 
-.tarefa-info p {
-  font-size: .78rem;
-  color: var(--text-mid);
-  margin-bottom: 0;
+.ts-feedback.sucesso {
+  color: var(--green);
 }
 
-.tarefa-meta {
+.ts-feedback.erro {
+  color: #ef4444;
+}
+
+.ts-modal-footer {
   display: flex;
-  gap: 6px;
-  margin-top: 8px;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 14px 20px;
+  border-top: 0.5px solid var(--color-border-tertiary);
+}
+
+.ts-btn-cancel {
+  padding: 8px 16px;
+  background: none;
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: 9px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  transition: background var(--transition);
+}
+
+.ts-btn-cancel:hover {
+  background: var(--color-background-secondary);
+}
+
+.ts-btn-salvar {
+  padding: 8px 18px;
+  background: var(--green-light);
+  color: #fff;
+  border: none;
+  border-radius: 9px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+.ts-btn-salvar:hover {
+  background: var(--green);
+}
+
+.ts-select {
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2352525b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 13px center;
+  padding-right: 36px;
+}
+
+.ts-tarefa-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
   flex-wrap: wrap;
 }
 
-.prazo, .materia {
-  font-size: .7rem;
-  padding: 2px 8px;
-  border-radius: 20px;
-}
-
-.prazo {
-  background: var(--green-soft);
-  color: var(--green);
-  border: 1px solid var(--green-border);
-}
-
-.prazo.urgente {
-  background: #fff4ec;
-  color: #c05000;
-  border-color: #f0c090;
-}
-
-.materia {
-  background: #f4f4f4;
-  color: var(--text-mid);
-  border: 1px solid #e4e4e4;
-}
-
-/* ── Usuários ──────────────────────────────────────────── */
-.usuarios-search {
-  width: 100%;
-  padding: 8px 12px;
-  font-family: inherit;
-  font-size: .82rem;
-  border: 1px solid var(--green-border);
-  border-radius: var(--radius);
-  background: var(--green-soft);
-  color: var(--text-dark);
-  outline: none;
-  margin-bottom: 14px;
-  transition: border-color var(--ease), box-shadow var(--ease);
-}
-
-.usuarios-search:focus {
-  border-color: var(--green);
-  box-shadow: 0 0 0 3px rgba(46,125,82,.08);
-}
-
-.usuarios-search::placeholder { color: var(--text-light); }
-
-.group-label {
-  font-size: .68rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: .07em;
-  color: var(--text-light);
-  margin: 12px 0 6px;
-}
-
-.group-label:first-child { margin-top: 0; }
-
-.usuario-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 9px 10px;
-  border-radius: var(--radius);
-  border: 1px solid transparent;
-  margin-bottom: 4px;
-  transition: background var(--ease), border-color var(--ease);
-}
-
-.usuario-item:hover {
-  background: var(--green-soft);
-  border-color: var(--green-border);
-}
-
-.user-avatar {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: .72rem;
+.ts-tarefa-tipo {
+  font-size: 0.68rem;
   font-weight: 700;
-  color: #fff;
-  flex-shrink: 0;
-  letter-spacing: .02em;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  padding: 2px 8px;
+  border-radius: 5px;
 }
 
-.user-info { flex: 1; }
-
-.user-info strong {
-  display: block;
-  font-size: .84rem;
-  font-weight: 600;
-  color: var(--text-dark);
+.ts-tipo-atividade {
+  background: #dbeafe;
+  color: #2563eb;
 }
 
-.user-info span {
-  font-size: .73rem;
-  color: var(--text-light);
+.ts-tipo-trabalho {
+  background: #fef9c3;
+  color: #a16207;
 }
 
-.user-role {
-  font-size: .68rem;
-  font-weight: 600;
-  padding: 2px 9px;
-  border-radius: 20px;
+.ts-tipo-prova {
+  background: #fee2e2;
+  color: #dc2626;
 }
 
-.user-role.professor {
-  background: var(--green-soft);
-  color: var(--green);
-  border: 1px solid var(--green-border);
+.ts-alunos-list::-webkit-scrollbar,
+.ts-tarefas-list::-webkit-scrollbar {
+  width: 4px;
 }
 
-.user-role.aluno {
-  background: #f4f4f4;
-  color: var(--text-mid);
-  border: 1px solid #e4e4e4;
+.ts-alunos-list::-webkit-scrollbar-track,
+.ts-tarefas-list::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-/* ── Empty state ───────────────────────────────────────── */
-.empty-state {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 80px;
-  font-size: .82rem;
-  color: var(--text-light);
+.ts-alunos-list::-webkit-scrollbar-thumb,
+.ts-tarefas-list::-webkit-scrollbar-thumb {
+  background: var(--green-border);
+  border-radius: 4px;
 }
