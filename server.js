@@ -233,6 +233,20 @@ app.get('/tarefas_turma/:turma_id', async (req, res) => {
   res.json(tarefas);
 });
 
+app.patch('/concluir_tarefa/:id', async (req, res) => {
+  const usuario = obterUsuario(req);
+  if (!usuario) return res.status(401).send('Não autorizado.');
+
+  const { error } = await supabase
+    .from('tarefas')
+    .update({ concluida: true })
+    .eq('id', req.params.id)
+    .eq('usuario_id', usuario.id);
+
+  if (error) return res.status(500).send(error.message);
+  res.sendStatus(200);
+});
+
 app.post('/logout', (req, res) => {
     res.clearCookie('token');
     res.send('Logout realizado.');

@@ -28,6 +28,11 @@ const btnCancelar = document.getElementById('modal-cancelar');
 const btnConfirmar = document.getElementById('modal-confirmar');
 const inputMateria = document.getElementById('modal-materia');
 const selectDia = document.getElementById('modal-dia');
+const modalTarefa = document.getElementById('modal-tarefa');
+const btnModalTarefaFechar = document.getElementById('modal-tarefa-fechar');
+const btnModalTarefaCancelar = document.getElementById('modal-tarefa-cancelar');
+const btnModalTarefaConcluir = document.getElementById('modal-tarefa-concluir');
+let tarefaSelecionadaId = null;
 
 DIAS.forEach(({ label, chave }) => {
   const opt = document.createElement('option');
@@ -47,6 +52,35 @@ btnAdd.addEventListener('click', abrirModal);
 btnFechar.addEventListener('click', fecharModal);
 btnCancelar.addEventListener('click', fecharModal);
 modal.addEventListener('click', (e) => { if (e.target === modal) fecharModal(); });
+btnModalTarefaFechar.addEventListener('click', fecharModalTarefa);
+btnModalTarefaCancelar.addEventListener('click', fecharModalTarefa);
+modalTarefa.addEventListener('click', (e) => { if (e.target === modalTarefa) fecharModalTarefa(); });
+
+btnModalTarefaConcluir.addEventListener('click', async () => {
+  if (!tarefaSelecionadaId) return;
+
+  try {
+    const res = await fetch(`/concluir_tarefa/${tarefaSelecionadaId}`, {
+      method: 'PATCH',
+      credentials: 'include'
+    });
+    if (!res.ok) { console.error(await res.text()); return; }
+
+    // Atualiza localmente para não precisar recarregar tudo
+    const t = tarefas.find(t => t.id === tarefaSelecionadaId);
+    if (t) t.concluida = true;
+
+    btnModalTarefaConcluir.textContent = '✓ Concluída';
+    btnModalTarefaConcluir.disabled = true;
+    btnModalTarefaConcluir.classList.add('btn-concluir--feita');
+
+    // Re-renderiza agenda e dashboard para refletir a mudança
+    RenderizarAgenda();
+    RenderizarDashboard();
+  } catch (err) {
+    console.error('Erro ao concluir tarefa:', err);
+  }
+});
 
 (function () {
   const MONTHS = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
@@ -185,13 +219,9 @@ function RenderizarAgenda() {
 
       tarefasDoDia.forEach(tarefa => {
         const card = document.createElement('div');
-        card.className = 'task-card';
-
-        // Reutiliza os elementos que o card já organizava (titulo)
-        card.innerHTML = `
-              <span>${tarefa.titulo}</span>
-            `;
-
+        card.className = 'task-card' + (tarefa.concluida ? ' task-card--concluida' : '');
+        card.innerHTML = `<span>${tarefa.titulo}</span>`;
+        card.addEventListener('click', () => abrirModalTarefa(tarefa));
         col.appendChild(card);
       });
 
@@ -316,26 +346,54 @@ async function deletarSessao(id, card) {
   }
 }
 
+function abrirModalTarefa(tarefa) {
+  tarefaSelecionadaId = tarefa.id;
+
+  document.getElementById('modal-tarefa-titulo').textContent = tarefa.titulo;
+  document.getElementById('modal-tarefa-descricao').textContent =
+    tarefa.descricao || 'Sem descrição.';
+
+  const formatarData = (iso) => {
+    if (!iso) return '—';
+    const [ano, mes, dia] = iso.split('T')[0].split('-');
+    return `${dia}/${mes}/${ano}`;
+  };
+
+  document.getElementById('modal-tarefa-criada').querySelector('span').textContent =
+    'Criada em ' + formatarData(tarefa.criado_em || tarefa.created_at);
+
+  document.getElementById('modal-tarefa-prazo').querySelector('span').textContent =
+    'Entrega: ' + formatarData(tarefa.data_fim);
+
+  // Se já foi concluída, desabilita o botão
+  if (tarefa.concluida) {
+    btnModalTarefaConcluir.textContent = '✓ Concluída';
+    btnModalTarefaConcluir.disabled = true;
+    btnModalTarefaConcluir.classList.add('btn-concluir--feita');
+  } else {
+    btnModalTarefaConcluir.textContent = '✓ Marcar como concluída';
+    btnModalTarefaConcluir.disabled = false;
+    btnModalTarefaConcluir.classList.remove('btn-concluir--feita');
+  }
+
+  modalTarefa.classList.add('open');
+}
+
+function fecharModalTarefa() {
+  modalTarefa.classList.remove('open');
+  tarefaSelecionadaId = null;
+}
+
 async function CarregarTarefas() {
   try {
     const res = await fetch('/tarefas', {
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      }
+      headers: { 'Content-Type': 'application/json' }
     });
-
-    if (!res.ok) {
-      const erroTexto = await res.text();
-      console.error(`Erro ${res.status}: ${erroTexto}`);
-      return;
-    }
-
+    if (!res.ok) { console.error(await res.text()); return; }
     tarefas = await res.json();
     RenderizarAgenda();
-
-    return tarefas;
-
+    RenderizarDashboard();
   } catch (error) {
     console.error('Erro de rede ao buscar tarefas:', error);
   }
@@ -345,11 +403,107 @@ async function CarregarSessoes() {
   try {
     const res = await fetch('/sessoes', { credentials: 'include' });
     if (!res.ok) { console.error(await res.text()); return; }
-    const data = await res.json();
-    RenderizarCronograma(data);
-  } catch (err) {
-    console.error('Erro ao carregar sessões:', err);
+    sessoes = await res.json();
+    RenderizarCronograma(sessoes);
+    RenderizarDashboard();
+  } catch (error) {
+    console.error('Erro ao carregar sessões:', error);
   }
+}
+
+function RenderizarDashboard() {
+  const hoje = new Date();
+  const diasSemana = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+  const diaHoje = diasSemana[hoje.getDay()];
+  const hojeISO = toISO(hoje);
+
+  // ── Sessões de hoje ──────────────────────────────────────
+  const sessoesHoje = sessoes.filter(s => s.dia === diaHoje);
+  const listaSessoes = document.getElementById('lista-sessoes-hoje');
+  const badgeSessoes = document.getElementById('badge-sessoes');
+
+  if (listaSessoes) {
+    if (sessoesHoje.length === 0) {
+      listaSessoes.innerHTML = '<li class="session-empty">Nenhuma sessão para hoje.</li>';
+    } else {
+      listaSessoes.innerHTML = sessoesHoje.map(s => `
+        <li class="session-item">
+          <div class="session-item__body">
+            <span class="session-item__subject">${s.materia}</span>
+          </div>
+        </li>
+      `).join('');
+    }
+  }
+
+  if (badgeSessoes) {
+    badgeSessoes.textContent = sessoesHoje.length === 1
+      ? '1 sessão'
+      : `${sessoesHoje.length} sessões`;
+  }
+
+  // ── Tarefas por urgência ─────────────────────────────────
+  // Ordena pela data_fim mais próxima (já vem ordenado do servidor,
+  // mas reordenamos aqui para garantir)
+  const tarefasOrdenadas = [...tarefas].sort((a, b) => {
+    if (!a.data_fim) return 1;
+    if (!b.data_fim) return -1;
+    return new Date(a.data_fim) - new Date(b.data_fim);
+  });
+
+  const listaTarefas = document.getElementById('lista-tarefas-dashboard');
+  const badgeTarefas = document.getElementById('badge-tarefas');
+
+  if (listaTarefas) {
+    if (tarefasOrdenadas.length === 0) {
+      listaTarefas.innerHTML = '<li class="session-empty">Nenhuma tarefa pendente.</li>';
+    } else {
+      listaTarefas.innerHTML = tarefasOrdenadas.map(t => {
+        const urgencia = calcularUrgencia(t.data_fim, hojeISO);
+        const concluidaClass = t.concluida ? 'task-item--concluida' : urgencia.classe;
+        return `
+    <li class="task-item ${concluidaClass}" data-id="${t.id}" style="cursor:pointer">
+      <span class="task-item__dot"></span>
+      <div class="task-item__body">
+        <span class="task-item__name">${t.titulo}</span>
+        <span class="task-item__meta">${t.concluida ? 'Concluída' : urgencia.label}</span>
+      </div>
+      ${!t.concluida && urgencia.tag ? `<span class="task-item__urgency">${urgencia.tag}</span>` : ''}
+      ${t.concluida ? `<span class="task-item__urgency task-item__urgency--ok">✓</span>` : ''}
+    </li>
+  `;
+      }).join('');
+
+      // Adiciona listeners nos itens após renderizar
+      listaTarefas.querySelectorAll('.task-item').forEach(li => {
+        li.addEventListener('click', () => {
+          const id = Number(li.dataset.id);
+          const tarefa = tarefas.find(t => t.id === id);
+          if (tarefa) abrirModalTarefa(tarefa);
+        });
+      });
+    }
+  }
+
+  if (badgeTarefas) {
+    badgeTarefas.textContent = tarefasOrdenadas.length === 1
+      ? '1 em aberto'
+      : `${tarefasOrdenadas.length} em aberto`;
+  }
+}
+
+function calcularUrgencia(dataFim, hojeISO) {
+  if (!dataFim) return { classe: '', label: 'Sem prazo', tag: '' };
+
+  const fim = new Date(dataFim + 'T00:00:00');
+  const hoje = new Date(hojeISO + 'T00:00:00');
+  const diff = Math.round((fim - hoje) / (1000 * 60 * 60 * 24));
+
+  if (diff < 0) return { classe: 'task-item--urgent', label: 'Atrasada', tag: 'atrasada' };
+  if (diff === 0) return { classe: 'task-item--urgent', label: 'Vence hoje', tag: 'urgente' };
+  if (diff === 1) return { classe: 'task-item--urgent', label: 'Vence amanhã', tag: 'urgente' };
+  if (diff <= 3) return { classe: '', label: `Vence em ${diff} dias`, tag: '' };
+  return { classe: '', label: `Vence em ${diff} dias`, tag: '' };
 }
 
 function MudarSecao(secao) {
