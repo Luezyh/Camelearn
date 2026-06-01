@@ -12,8 +12,8 @@
     href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="../CSS/home_aluno.css">
-  <link rel="stylesheet" href="../CSS/agenda.css">
   <link rel="stylesheet" href="../CSS/estudos.css">
+  <link rel="stylesheet" href="../CSS/agenda.css">
   <link rel="stylesheet" href="../CSS/dashboard.css">
 </head>
 
@@ -84,7 +84,7 @@
           <div class="dashboard__header">
             <div class="dashboard__greeting">
               <span class="dashboard__greeting-label">Bom dia ✦</span>
-              <h1 class="dashboard__greeting-name">Tomas Alves</h1>
+              <h1 class="dashboard__greeting-name">Luiz Miguel</h1>
               <p class="dashboard__greeting-sub">Você tem um dia produtivo pela frente — vamos nessa?</p>
             </div>
             <div class="dashboard__date-badge">
@@ -160,17 +160,8 @@
             <button class="btn-add" id="btn-add">+ Add sessão</button>
           </div>
 
-          <div class="semana-grid" id="semana-grid">
-            <div class="dia-col">
-              <div class="dia-col-header">Seg</div>
-              <div class="dia-col-body">
-                <div class="sessao">
-                  <div class="sessao-info">
-                    <p class="sessao-materia">Matemática</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div class="semana-grid-wrap">
+            <div class="semana-grid" id="semana-grid"></div>
           </div>
 
         </section>
@@ -194,10 +185,43 @@
           <label>Dia
             <select id="modal-dia"></select>
           </label>
+          <label>Cor
+            <div class="color-picker-wrap">
+              <input type="color" id="modal-cor" value="#2e7d52" class="input-cor" />
+              <span id="modal-cor-label">#2e7d52</span>
+            </div>
+          </label>
         </div>
         <div class="modal-footer">
           <button class="btn-cancel" id="modal-cancelar">Cancelar</button>
           <button class="btn-confirm" id="modal-confirmar">Adicionar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-editar-sessao">
+      <div class="modal">
+        <div class="modal-header">
+          <h2>Editar sessão</h2>
+          <button class="modal-close" id="modal-editar-fechar">&times;</button>
+        </div>
+        <div class="modal-body">
+          <label>Matéria
+            <input type="text" id="modal-editar-materia" placeholder="Ex: Matemática" />
+          </label>
+          <label>Dia
+            <select id="modal-editar-dia"></select>
+          </label>
+          <label>Cor
+            <div class="color-picker-wrap">
+              <input type="color" id="modal-editar-cor" value="#2e7d52" class="input-cor" />
+              <span id="modal-editar-cor-label">#2e7d52</span>
+            </div>
+          </label>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-cancel btn-deletar-sessao" id="modal-editar-deletar">Excluir</button>
+          <button class="btn-confirm" id="modal-editar-confirmar">Salvar</button>
         </div>
       </div>
     </div>

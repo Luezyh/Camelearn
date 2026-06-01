@@ -1,10 +1,4 @@
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
   --green: #2e7d52;
@@ -19,21 +13,13 @@
   --ease: .2s ease;
 }
 
-
-.demo-card {
-  width: 900px;
-  height: 520px;
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, .09);
-}
-
 /* ── Section ── */
 .cronograma-section {
   width: 100%;
   height: 100%;
   display: none;
   flex-direction: column;
+  overflow: hidden;
 }
 
 /* ── Header ── */
@@ -66,17 +52,23 @@
   transition: background var(--ease);
 }
 
-.btn-add:hover {
-  background: #256645;
+.btn-add:hover { background: #256645; }
+
+/* ── Wrap externo do grid ── */
+.semana-grid-wrap {
+  flex: 1;
+  overflow: hidden;
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
 }
 
-/* ── Grid de dias ── */
+/* ── Grid de dias (espelho da agenda) ── */
 .semana-grid {
   flex: 1;
-  margin: 2em;
+  background: var(--bg);
   border: 1px solid var(--green-border);
-  border-radius: var(--radius);
-  background-color: var(--bg);
+  border-radius: 14px;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   overflow: hidden;
@@ -88,35 +80,41 @@
   border-right: 1px solid var(--green-border);
 }
 
-.dia-col:last-child {
-  border-right: none;
+.dia-col:last-child { border-right: none; }
+
+/* Cabeçalho igual ao da agenda (letra + número do dia) */
+.dia-col-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 14px 6px;
+  border-bottom: 1px solid var(--green-border);
+  flex-shrink: 0;
+  gap: 2px;
 }
 
-.dia-col-header {
-  padding: 10px 0;
-  text-align: center;
+.dia-col-header__label {
   font-size: .72rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: .06em;
-  color: var(--text-light);
-  border-bottom: 1px solid var(--green-border);
-  flex-shrink: 0;
+  color: var(--text-dark);
 }
+
+.dia-col-header__num {
+  font-size: 1.3rem;
+  font-weight: 300;
+  color: var(--text-light);
+}
+
+/* Destaque do dia atual */
+.dia-col--hoje .dia-col-header__label { color: var(--green); }
+.dia-col--hoje .dia-col-header__num   { color: var(--green); font-weight: 600; }
 
 .dia-col-body {
   flex: 1;
   padding: 8px 6px;
-}
-
-.sessao {
-  background: var(--green);
-  border: 1px solid var(--green-border);
-  border-radius: var(--radius);
-  padding: 8px;
-  margin-bottom: 6px;
-  text-align: center;
-  color: white;
+  overflow-y: auto;
 }
 
 .dia-col-body.drag-over {
@@ -125,51 +123,113 @@
   border-radius: var(--radius);
 }
 
-.sessao.dragging {
-  opacity: .4;
-  cursor: grabbing;
-}
-
+/* ── Card de sessão ── */
 .sessao {
-  cursor: grab;
-}
-
-.sessao {
+  border-radius: var(--radius);
+  padding: 8px 10px;
+  margin-bottom: 6px;
+  color: #fff;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  cursor: grab;
+  cursor: pointer;
+  transition: opacity var(--ease), box-shadow var(--ease);
 }
 
-.sessao-nome {
-  font-size: .68rem;
-  color: var(--text-light);
+.sessao:hover { opacity: .88; box-shadow: 0 2px 8px rgba(0,0,0,.15); }
+.sessao.dragging { opacity: .4; cursor: grabbing; }
+
+.sessao-materia {
+  font-size: .8rem;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .sessao-delete {
   background: none;
   border: none;
-  color: var(--text-light);
+  color: rgba(255,255,255,.7);
   font-size: 1rem;
   cursor: pointer;
   padding: 0 2px;
   line-height: 1;
   opacity: 0;
+  flex-shrink: 0;
   transition: opacity var(--ease), color var(--ease);
 }
 
-.sessao:hover .sessao-delete {
-  opacity: 1;
+.sessao:hover .sessao-delete { opacity: 1; }
+.sessao-delete:hover { color: #fff; }
+
+/* ── Seletor de cor ── */
+.color-picker-wrap {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--green-border);
+  border-radius: 8px;
+  background: var(--green-soft);
 }
 
-.sessao-delete:hover {
-  color: #c0392b;
+.color-picker-wrap span {
+  font-size: .82rem;
+  color: var(--text-mid);
+  font-family: inherit;
+  line-height: 1;
+  align-self: center;
 }
 
+.input-cor {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  outline: none;
+  box-shadow: none;
+  position: relative;
+  top: 2px;
+}
+
+.input-cor::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.input-cor::-webkit-color-swatch {
+  border-radius: 4px;
+  border: none;
+}
+
+.input-cor::-moz-color-swatch {
+  border-radius: 4px;
+  border: none;
+}
+/* ── Botão de deletar no modal de edição ── */
+.btn-deletar-sessao {
+  color: #c0392b !important;
+  border-color: #f5c6c6 !important;
+}
+
+.btn-deletar-sessao:hover {
+  background: #fef2f2 !important;
+}
+
+/* ── Modais ── */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, .2);
+  background: rgba(0,0,0,.2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -179,25 +239,20 @@
   z-index: 100;
 }
 
-.modal-overlay.open {
-  opacity: 1;
-  pointer-events: auto;
-}
+.modal-overlay.open { opacity: 1; pointer-events: auto; }
 
 .modal {
   background: #fff;
   border-radius: 10px;
   width: 340px;
   border: 1px solid var(--green-border);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, .1);
+  box-shadow: 0 8px 32px rgba(0,0,0,.1);
   transform: translateY(8px);
   transition: transform .2s ease;
   overflow: hidden;
 }
 
-.modal-overlay.open .modal {
-  transform: translateY(0);
-}
+.modal-overlay.open .modal { transform: translateY(0); }
 
 .modal-header {
   display: flex;
@@ -215,24 +270,16 @@
 }
 
 .modal-close {
-  width: 24px;
-  height: 24px;
-  background: none;
-  border: none;
+  width: 24px; height: 24px;
+  background: none; border: none;
   color: var(--text-light);
-  font-size: 1.1rem;
-  cursor: pointer;
+  font-size: 1.1rem; cursor: pointer;
   border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
   transition: background .2s ease, color .2s ease;
 }
 
-.modal-close:hover {
-  background: var(--green-soft);
-  color: var(--green);
-}
+.modal-close:hover { background: var(--green-soft); color: var(--green); }
 
 .modal-body {
   padding: 16px 18px;
@@ -250,7 +297,7 @@
   color: var(--text-mid);
 }
 
-.modal-body input,
+.modal-body input[type="text"],
 .modal-body select {
   padding: 8px 10px;
   font-family: inherit;
@@ -263,15 +310,13 @@
   transition: border-color .2s ease, box-shadow .2s ease;
 }
 
-.modal-body input:focus,
+.modal-body input[type="text"]:focus,
 .modal-body select:focus {
   border-color: var(--green);
-  box-shadow: 0 0 0 3px rgba(46, 125, 82, .08);
+  box-shadow: 0 0 0 3px rgba(46,125,82,.08);
 }
 
-.modal-body input::placeholder {
-  color: var(--text-light);
-}
+.modal-body input::placeholder { color: var(--text-light); }
 
 .modal-footer {
   display: flex;
@@ -283,38 +328,23 @@
 
 .btn-cancel {
   padding: 7px 14px;
-  font-family: inherit;
-  font-size: .8rem;
-  font-weight: 500;
-  color: var(--text-mid);
-  background: #fff;
+  font-family: inherit; font-size: .8rem; font-weight: 500;
+  color: var(--text-mid); background: #fff;
   border: 1px solid var(--green-border);
-  border-radius: 8px;
-  cursor: pointer;
+  border-radius: 8px; cursor: pointer;
   transition: background .2s ease;
 }
 
-.btn-cancel:hover {
-  background: var(--green-soft);
-}
+.btn-cancel:hover { background: var(--green-soft); }
 
 .btn-confirm {
   padding: 7px 14px;
-  font-family: inherit;
-  font-size: .8rem;
-  font-weight: 600;
-  color: #fff;
-  background: var(--green);
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
+  font-family: inherit; font-size: .8rem; font-weight: 600;
+  color: #fff; background: var(--green);
+  border: none; border-radius: 8px; cursor: pointer;
   transition: background .2s ease;
 }
 
-.btn-confirm:hover {
-  background: #256645;
-}
+.btn-confirm:hover { background: #256645; }
 
-.show {
-  display: flex;
-}
+.show { display: flex; }

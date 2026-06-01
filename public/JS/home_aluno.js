@@ -14,6 +14,17 @@ const DIAS = [
   { label: 'Sex', chave: 'Sexta' },
   { label: 'Sáb', chave: 'Sábado' },
 ];
+const modalEditarSessao      = document.getElementById('modal-editar-sessao');
+const btnModalEditarFechar   = document.getElementById('modal-editar-fechar');
+const btnModalEditarConfirmar= document.getElementById('modal-editar-confirmar');
+const btnModalEditarDeletar  = document.getElementById('modal-editar-deletar');
+const inputEditarMateria     = document.getElementById('modal-editar-materia');
+const selectEditarDia        = document.getElementById('modal-editar-dia');
+const inputEditarCor         = document.getElementById('modal-editar-cor');
+const inputEditarCorLabel    = document.getElementById('modal-editar-cor-label');
+const inputCor               = document.getElementById('modal-cor');
+const inputCorLabel          = document.getElementById('modal-cor-label');
+let sessaoSelecionadaId = null;
 const grid = document.getElementById('semana-grid');
 const overlay = document.getElementById('overlay');
 const avatarBtn = document.getElementById('avatarBtn');
@@ -39,6 +50,13 @@ DIAS.forEach(({ label, chave }) => {
   opt.value = chave;
   opt.textContent = label;
   selectDia.appendChild(opt);
+});
+
+DIAS.forEach(({ label, chave }) => {
+  const opt = document.createElement('option');
+  opt.value = chave;
+  opt.textContent = label;
+  selectEditarDia.appendChild(opt);
 });
 
 function abrirModal() { modal.classList.add('open'); }
@@ -93,9 +111,10 @@ btnModalTarefaConcluir.addEventListener('click', async () => {
 
 btnConfirmar.addEventListener('click', async () => {
   const materia = inputMateria.value.trim();
-  const dia = selectDia.value;
+  const dia     = selectDia.value;
+  const cor     = inputCor.value;
   if (!materia) return;
-  await CriarSessao(materia, dia);
+  await CriarSessao(materia, dia, cor);
   fecharModal();
 });
 
@@ -109,6 +128,36 @@ document.querySelectorAll('.cl-nav-item:not(.cl-logout)').forEach(item => {
     document.querySelectorAll('.cl-nav-item').forEach(n => n.classList.remove('active'));
     this.classList.add('active');
   });
+});
+
+inputCor.addEventListener('input', () => {
+  inputCorLabel.textContent = inputCor.value;
+});
+
+inputEditarCor.addEventListener('input', () => {
+  inputEditarCorLabel.textContent = inputEditarCor.value;
+});
+
+btnModalEditarFechar.addEventListener('click', fecharModalEditarSessao);
+modalEditarSessao.addEventListener('click', (e) => {
+  if (e.target === modalEditarSessao) fecharModalEditarSessao();
+});
+
+btnModalEditarDeletar.addEventListener('click', async () => {
+  if (!sessaoSelecionadaId) return;
+  const card = document.querySelector(`.sessao[data-id="${sessaoSelecionadaId}"]`);
+  await deletarSessao(sessaoSelecionadaId, card);
+  fecharModalEditarSessao();
+});
+
+btnModalEditarConfirmar.addEventListener('click', async () => {
+  if (!sessaoSelecionadaId) return;
+  const materia = inputEditarMateria.value.trim();
+  const dia     = selectEditarDia.value;
+  const cor     = inputEditarCor.value;
+  if (!materia) return;
+  await editarSessao(sessaoSelecionadaId, materia, dia, cor);
+  fecharModalEditarSessao();
 });
 
 function openDropdown(btn, dropdown) {
@@ -230,23 +279,36 @@ function RenderizarAgenda() {
   }
 }
 
-function RenderizarCronograma(sessoes) {
+function RenderizarCronograma(lista) {
   const grid = document.getElementById('semana-grid');
   grid.innerHTML = '';
 
-  DIAS.forEach(({ label, chave }) => {
+  // Dias da semana atual para pegar os números
+  const hoje = new Date();
+  hoje.setHours(0,0,0,0);
+  const dom = new Date(hoje);
+  dom.setDate(hoje.getDate() - hoje.getDay());
+
+  const diaHojeIdx = hoje.getDay(); // 0=Dom ... 6=Sáb
+
+  DIAS.forEach(({ label, chave }, i) => {
+    const diaData = new Date(dom);
+    diaData.setDate(dom.getDate() + i);
+
     const col = document.createElement('div');
-    col.className = 'dia-col';
+    col.className = 'dia-col' + (i === diaHojeIdx ? ' dia-col--hoje' : '');
 
     const header = document.createElement('div');
     header.className = 'dia-col-header';
-    header.textContent = label;
+    header.innerHTML = `
+      <span class="dia-col-header__label">${label}</span>
+      <span class="dia-col-header__num">${diaData.getDate()}</span>
+    `;
 
     const body = document.createElement('div');
     body.className = 'dia-col-body';
     body.dataset.dia = chave;
 
-    // drag-over na coluna
     body.addEventListener('dragover', (e) => {
       e.preventDefault();
       body.classList.add('drag-over');
@@ -255,7 +317,7 @@ function RenderizarCronograma(sessoes) {
     body.addEventListener('drop', (e) => {
       e.preventDefault();
       body.classList.remove('drag-over');
-      const id = e.dataTransfer.getData('sessao-id');
+      const id = Number(e.dataTransfer.getData('sessao-id'));
       const card = document.querySelector(`.sessao[data-id="${id}"]`);
       if (card) {
         body.appendChild(card);
@@ -263,8 +325,7 @@ function RenderizarCronograma(sessoes) {
       }
     });
 
-    // sessões do dia
-    sessoes.filter(s => s.dia === chave).forEach(s => {
+    lista.filter(s => s.dia === chave).forEach(s => {
       body.appendChild(criarCard(s));
     });
 
@@ -274,18 +335,40 @@ function RenderizarCronograma(sessoes) {
   });
 }
 
+function abrirModalEditarSessao(s) {
+  sessaoSelecionadaId = s.id;
+  inputEditarMateria.value = s.materia;
+  selectEditarDia.value    = s.dia;
+  inputEditarCor.value     = s.cor || '#2e7d52';
+  inputEditarCorLabel.textContent = s.cor || '#2e7d52';
+  modalEditarSessao.classList.add('open');
+}
+
+function fecharModalEditarSessao() {
+  modalEditarSessao.classList.remove('open');
+  sessaoSelecionadaId = null;
+}
+
 function criarCard(s) {
+  const cor = s.cor || '#2e7d52';
   const card = document.createElement('div');
   card.className = 'sessao';
   card.dataset.id = s.id;
   card.draggable = true;
+  card.style.background = cor;
+  card.style.borderColor = cor;
 
   card.innerHTML = `
     <div class="sessao-info">
       <p class="sessao-materia">${s.materia}</p>
     </div>
-    <button class="sessao-delete" title="Remover sessão">x</button>
+    <button class="sessao-delete" title="Remover sessão">×</button>
   `;
+
+  card.addEventListener('click', (e) => {
+    if (e.target.closest('.sessao-delete')) return;
+    abrirModalEditarSessao(s);
+  });
 
   card.addEventListener('dragstart', (e) => {
     e.dataTransfer.setData('sessao-id', s.id);
@@ -301,22 +384,41 @@ function criarCard(s) {
   return card;
 }
 
-async function CriarSessao(materia, dia) {
+async function CriarSessao(materia, dia, cor = '#2e7d52') {
   try {
     const res = await fetch('/sessoes', {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ materia, dia })
+      body: JSON.stringify({ materia, dia, cor })
     });
     if (!res.ok) { console.error(await res.text()); return; }
     const nova = await res.json();
-
-    // adiciona o card na coluna correta sem re-renderizar tudo
     const col = document.querySelector(`.dia-col-body[data-dia="${dia}"]`);
     if (col) col.appendChild(criarCard(nova));
   } catch (err) {
     console.error('Erro ao criar sessão:', err);
+  }
+}
+
+async function editarSessao(id, materia, dia, cor) {
+  try {
+    const res = await fetch(`/sessoes/${id}`, {
+      method: 'PATCH',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ materia, dia, cor })
+    });
+    if (!res.ok) { console.error(await res.text()); return; }
+
+    // Atualiza o objeto no array local
+    const s = sessoes.find(s => s.id === id);
+    if (s) { s.materia = materia; s.dia = dia; s.cor = cor; }
+
+    // Re-renderiza o cronograma para refletir dia/cor/matéria novos
+    RenderizarCronograma(sessoes);
+  } catch (err) {
+    console.error('Erro ao editar sessão:', err);
   }
 }
 
@@ -328,6 +430,9 @@ async function atualizarDiaSessao(id, novoDia) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ dia: novoDia })
     });
+    // Atualiza o array local também
+    const s = sessoes.find(s => s.id === id);
+    if (s) s.dia = novoDia;
   } catch (err) {
     console.error('Erro ao atualizar sessão:', err);
   }
@@ -340,6 +445,8 @@ async function deletarSessao(id, card) {
       credentials: 'include'
     });
     if (!res.ok) { console.error(await res.text()); return; }
+    // Remove do array local
+    sessoes = sessoes.filter(s => s.id !== id);
     card.remove();
   } catch (err) {
     console.error('Erro ao deletar sessão:', err);

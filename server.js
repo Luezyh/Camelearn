@@ -181,14 +181,22 @@ app.post('/sessoes', async (req, res) => {
   res.json(data);
 });
 
-app.delete('/sessoes/:id', async (req, res) => {
+app.patch('/sessoes/:id', async (req, res) => {
   const usuario = obterUsuario(req);
   if (!usuario) return res.status(401).send('Não autorizado.');
+
+  const { id } = req.params;
+  const campos = {};
+  if (req.body.dia     !== undefined) campos.dia     = req.body.dia;
+  if (req.body.materia !== undefined) campos.materia = req.body.materia;
+  if (req.body.cor     !== undefined) campos.cor     = req.body.cor;
+
   const { error } = await supabase
     .from('sessoes')
-    .delete()
-    .eq('id', req.params.id)
+    .update(campos)
+    .eq('id', id)
     .eq('usuario_id', usuario.id);
+
   if (error) return res.status(500).send(error.message);
   res.sendStatus(200);
 });
