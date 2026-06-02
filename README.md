@@ -26,7 +26,6 @@ Antes de começar, certifique-se de ter instalado em sua máquina:
 
 - [Node.js](https://nodejs.org/)
 - [Git](https://git-scm.com/)
-- [MySQL](https://www.mysql.com/)
 
 ### Passo a passo
 
@@ -45,7 +44,7 @@ cd camelearn
 **3. Instale as dependências**
 
 ```bash
-npm install express mysql2 cors jsonwebtoken cookie-parser
+npm install express cors jsonwebtoken cookie-parser @supabase/supabase-js @supabase/ssr
 ```
 
 **4. Inicie o servidor**
