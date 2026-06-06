@@ -204,3 +204,69 @@ async function carregarTarefasTurma() {
     listaTarefas.innerHTML = '<li class="ts-tarefa-vazia">Erro ao carregar tarefas.</li>';
   }
 }
+
+// Chame isso quando a página carregar
+async function carregarInicio() {
+  // Saudação por período do dia
+  const hora = new Date().getHours();
+  const periodo = hora < 12 ? 'Bom dia' : hora < 18 ? 'Boa tarde' : 'Boa noite';
+  document.getElementById('hiPeriodo').textContent = periodo;
+
+  // Data formatada
+  const agora = new Date();
+  document.getElementById('hiData').textContent = agora.toLocaleDateString('pt-BR', {
+    weekday: 'long', day: 'numeric', month: 'long'
+  });
+
+  // Busca tarefas da turma
+  const res = await fetch('/tarefas_turma/1');
+  if (!res.ok) return;
+  const tarefas = await res.json();
+
+  // Total no card
+  document.getElementById('hiTotalTarefas').textContent = tarefas.length;
+
+  // Próxima entrega
+  const proxima = tarefas[0]; // já vem ordenado por data_fim ASC
+  if (proxima) {
+    const dataFormatada = new Date(proxima.data_fim + 'T00:00:00').toLocaleDateString('pt-BR', {
+      day: '2-digit', month: 'short'
+    });
+    document.getElementById('hiProximaData').textContent = dataFormatada;
+    document.getElementById('hiProximaTitulo').textContent = proxima.titulo;
+  }
+
+  // Lista de próximas tarefas (máx. 5)
+  const lista = document.getElementById('hiListaTarefas');
+  lista.innerHTML = '';
+
+  if (tarefas.length === 0) {
+    lista.innerHTML = '<li class="hi-tarefas-vazia">Nenhuma tarefa criada ainda.</li>';
+    return;
+  }
+
+  const cores = {
+    atividade: 'ts-tipo-atividade',
+    trabalho:  'ts-tipo-trabalho',
+    prova:     'ts-tipo-prova'
+  };
+
+  tarefas.slice(0, 5).forEach(t => {
+    const data = new Date(t.data_fim + 'T00:00:00').toLocaleDateString('pt-BR', {
+      day: '2-digit', month: 'short', year: 'numeric'
+    });
+    const li = document.createElement('li');
+    li.className = 'hi-tarefa-item';
+    li.innerHTML = `
+      <span class="hi-tarefa-tipo ts-tarefa-tipo ${cores[t.tipo] || ''}">${t.tipo}</span>
+      <div class="hi-tarefa-info">
+        <div class="hi-tarefa-titulo">${t.titulo}</div>
+        <div class="hi-tarefa-data">Entrega: ${data}</div>
+      </div>
+    `;
+    lista.appendChild(li);
+  });
+}
+
+// Chame carregarInicio() junto com os outros inits da página
+carregarInicio();

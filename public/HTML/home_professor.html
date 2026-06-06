@@ -60,8 +60,7 @@
               <ul class="cl-profile-menu">
                 <li><a href="" class="cl-profile-item"><i class="ti ti-user-circle"></i><span>Meu
                       perfil</span></a></li>
-                <li><a href="" class="cl-profile-item"><i
-                      class="ti ti-settings"></i><span>Configurações</span></a></li>
+                <li><a href="" class="cl-profile-item"><i class="ti ti-settings"></i><span>Configurações</span></a></li>
               </ul>
               <div class="cl-profile-footer">
                 <a href="../HTML/login.html" class="cl-profile-logout"><i class="ti ti-logout"></i><span>Sair da
@@ -74,8 +73,89 @@
       </header>
 
       <div class="cl-body">
+        
         <section class="inicio show" id="inicio">
-          <h1>Bem-vindo, Professor!</h1>
+
+          <!-- Cabeçalho de boas-vindas -->
+          <div class="hi-header">
+            <div class="hi-greeting">
+              <p class="hi-eyebrow" id="hiPeriodo">Bom dia</p>
+              <h1 class="hi-title">Olá, <span id="hiNome">Professor</span> 👋</h1>
+              <p class="hi-sub">Aqui está um resumo da sua turma hoje.</p>
+            </div>
+            <div class="hi-date" id="hiData"></div>
+          </div>
+
+          <!-- Cards de resumo -->
+          <div class="hi-cards">
+
+            <div class="hi-card">
+              <div class="hi-card-icon hi-icon-green">
+                <i class="ti ti-clipboard-list"></i>
+              </div>
+              <div class="hi-card-info">
+                <span class="hi-card-label">Tarefas criadas</span>
+                <strong class="hi-card-value" id="hiTotalTarefas">—</strong>
+              </div>
+            </div>
+
+            <div class="hi-card">
+              <div class="hi-card-icon hi-icon-blue">
+                <i class="ti ti-users"></i>
+              </div>
+              <div class="hi-card-info">
+                <span class="hi-card-label">Alunos na turma</span>
+                <strong class="hi-card-value">12</strong>
+              </div>
+            </div>
+
+            <div class="hi-card hi-card--destaque" id="hiProximaCard">
+              <div class="hi-card-icon hi-icon-orange">
+                <i class="ti ti-calendar-due"></i>
+              </div>
+              <div class="hi-card-info">
+                <span class="hi-card-label">Próxima entrega</span>
+                <strong class="hi-card-value" id="hiProximaData">—</strong>
+                <span class="hi-card-sub" id="hiProximaTitulo">Nenhuma tarefa</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Ações rápidas -->
+          <div class="hi-section-title">Ações rápidas</div>
+          <div class="hi-acoes">
+
+            <button class="hi-acao"
+              onclick="MudarSecao('turma-section'); setTimeout(() => document.getElementById('btnAbrirModalTarefa').click(), 150)">
+              <div class="hi-acao-icon">
+                <i class="ti ti-plus"></i>
+              </div>
+              <span>Nova tarefa</span>
+            </button>
+
+            <button class="hi-acao" onclick="MudarSecao('turma-section')">
+              <div class="hi-acao-icon">
+                <i class="ti ti-users"></i>
+              </div>
+              <span>Ver turma</span>
+            </button>
+
+            <button class="hi-acao" onclick="MudarSecao('turma-section')">
+              <div class="hi-acao-icon">
+                <i class="ti ti-checklist"></i>
+              </div>
+              <span>Ver tarefas</span>
+            </button>
+
+          </div>
+
+          <!-- Lista das próximas tarefas -->
+          <div class="hi-section-title">Próximas tarefas</div>
+          <ul class="hi-tarefas-lista" id="hiListaTarefas">
+            <li class="hi-tarefas-vazia">Nenhuma tarefa criada ainda.</li>
+          </ul>
+
         </section>
 
         <section class="turma-section" id="turma-section">

@@ -201,23 +201,6 @@ app.patch('/sessoes/:id', async (req, res) => {
   res.sendStatus(200);
 });
 
-app.patch('/sessoes/:id', async (req, res) => {
-  const usuario = obterUsuario(req);
-  if (!usuario) return res.status(401).send('Não autorizado.');
-
-  const { id } = req.params;
-  const { dia } = req.body;
-
-  const { error } = await supabase
-    .from('sessoes')
-    .update({ dia })
-    .eq('id', id)
-    .eq('usuario_id', usuario.id);
-
-  if (error) return res.status(500).send(error.message);
-  res.sendStatus(200);
-});
-
 app.post('/criar_tarefa', async (req, res) => {
     const usuario = obterUsuario(req);
     if (usuario.tipo !== 'professor') return res.status(401).send('Não autorizado.');
